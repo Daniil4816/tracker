@@ -185,6 +185,31 @@
   .warn{font-size:11px;color:#C0504D;font-weight:600;margin-left:4px}
   .addrow select{background:var(--empty);border:none;border-radius:10px;padding:9px 6px;font-size:16px}
   .card-plain textarea{width:100%;background:var(--empty);border:none;border-radius:10px;padding:10px;font-size:14px;resize:vertical}
+  .eng-hero{background:linear-gradient(135deg,var(--yellow),var(--mint));border-radius:var(--radius);padding:18px;margin-top:12px}
+  .eng-hero h2{margin:0 0 2px;font-size:20px}
+  .eng-row{display:flex;gap:14px;align-items:center;margin-top:10px}
+  .eng-ring{position:relative;width:110px;height:110px;flex:none}
+  .eng-ring .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:22px}
+  .eng-ring .val small{font-size:11px;font-weight:400;color:var(--muted)}
+  .pill{display:inline-block;background:var(--card);border-radius:999px;padding:4px 10px;font-size:12px;margin:3px 4px 0 0}
+  .chk{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--beige)}
+  .chk:first-child{border-top:none}
+  .chk .tx{flex:1;font-size:14px}.chk.done .tx{text-decoration:line-through;opacity:.55}
+  .chk .dt{font-size:12px;color:var(--muted);flex:none}
+  .strip{display:flex;gap:4px;margin-top:10px}
+  .strip i{flex:1;height:26px;border-radius:7px;background:var(--empty);font-style:normal;font-size:10px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .strip i.l1{background:#cfe3d5}.strip i.l2{background:#a9cdb4}.strip i.l3{background:#7FAE8C;color:#fff}.strip i.l4{background:#5E8F6F;color:#fff}
+  .res{padding:10px 0;border-top:1px solid var(--beige)}.res:first-child{border-top:none}
+  .res .rh{display:flex;justify-content:space-between;font-size:14px;font-weight:600}
+  .rp{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:var(--muted)}
+  .rp b{width:26px;color:var(--ink)}.rp .bar2{flex:1;height:7px;background:var(--beige);border-radius:4px;overflow:hidden}
+  .rp .bar2 i{display:block;height:100%;border-radius:4px}.rp em{font-style:normal;width:54px;text-align:right}
+  details.jr{border-top:1px solid var(--beige);padding:10px 0}details.jr:first-child{border-top:none}
+  details.jr summary{font-weight:600;font-size:14px;cursor:pointer;list-style:none}
+  details.jr .body{white-space:pre-line;font-size:13px;line-height:1.55;margin-top:8px;color:var(--ink)}
+  .ms{display:flex;gap:12px;padding:8px 0;align-items:flex-start}
+  .ms .dot{width:14px;height:14px;border-radius:50%;border:3px solid var(--beige);margin-top:3px;flex:none;background:var(--card)}
+  .ms.on .dot{background:var(--green);border-color:var(--green)}
 </style>
 </head>
 <body>
@@ -209,6 +234,7 @@
 <nav class="tabs">
   <button data-act="tab" data-v="day">День</button>
   <button data-act="tab" data-v="track">Трекер</button>
+  <button data-act="tab" data-v="eng">Англ.</button>
   <button data-act="tab" data-v="stats">Статистика</button>
   <button data-act="tab" data-v="year">Год</button>
   <button data-act="tab" data-v="journal">Дневник</button>
@@ -298,6 +324,8 @@ const SEED = [
     note:"Час в день: сначала базовые темы, потом CSCA" },
   { kind:"habit", name:"Чтение книги 20:40", icon:"📖", color:PALETTE[5], category:"Развитие", reminder:"20:40",
     note:"30 страниц в день" },
+  { kind:"habit", name:"Anki 15–20 мин", icon:"🧠", color:PALETTE[1], category:"Учёба",
+    note:"Повторение слов в Anki 15–20 минут каждый день" },
   { kind:"habit", name:"Словарь: новые слова", icon:"📝", color:PALETTE[1], category:"Учёба",
     note:"Все новые слова с уроков — в словарь, потом в бота" },
   { kind:"habit", name:"Почта вузов: утро, день, вечер", icon:"✉️", color:PALETTE[4], category:"Поступление",
@@ -385,6 +413,12 @@ function load(){
   return { habits, journal:{}, dark:false };
 }
 let state = load();
+(function migrateSeed(){
+  const NEW = ["Чтение книги 20:40","Anki 15–20 мин"];
+  if(!state.seedSeen) state.seedSeen = SEED.map(x => x.name).filter(n => !NEW.includes(n));
+  const have = new Set(state.habits.map(h => h.name));
+  SEED.forEach(x => { if(!state.seedSeen.includes(x.name)){ if(!have.has(x.name)) state.habits.push(fromSeed(x)); state.seedSeen.push(x.name); } });
+})();
 let view = { year:new Date().getFullYear(), month:new Date().getMonth() };
 let tab = "track", filter = "Все", editing = null, ef = {color:PALETTE[0], days:[]};
 let draft = { date:todayParts().iso, rating:0, text:"" };
@@ -918,12 +952,127 @@ function dayHTML(){
 }
 setInterval(() => { if(tab === "day") render(); }, 60000);
 
+// ---------- Английский ----------
+const ENG_SEED = {
+  goalTitle:"IELTS Academic 5.5–6.0 к концу марта 2027",
+  ms:[
+    {id:"m1", date:"2026-11-03", text:"Тест уровня, старт плана (A2)", done:true},
+    {id:"m2", date:"2026-11-30", text:"Говорю о себе 2–3 минуты без пауз"},
+    {id:"m3", date:"2027-01-31", text:"Пробный тест, уровень B1"},
+    {id:"m4", date:"2027-02-28", text:"Февраль: записаться на IELTS на конец марта"},
+    {id:"m5", date:"2027-03-31", text:"Сдан IELTS (цель 5.5–6.0)"},
+    {id:"m6", date:"2027-05-01", text:"Сертификат готов к подаче"}
+  ],
+  goals:[
+    {id:"g1", text:"Листы 1 и 8 (неправильные глаголы V1, V2, V3): сделать и прислать"},
+    {id:"g2", text:"Листы 2–7 и 9–10: места, где ошибка поправлена, переписать правильно"},
+    {id:"g3", text:"Листы 3, 4, 5 и 9: подряд без ошибок в последних заданиях"},
+    {id:"g4", text:"Говорение: 2–3 минуты без пауз по вопросам 1–10 из листа 11"},
+    {id:"g5", text:"Каждый день: 10 новых слов и Anki 15–20 минут (отмечается ниже)"}
+  ],
+  results:[
+    {id:"r1", name:"Лист 2", date:"2026-11-12", parts:[{l:"Б",g:8,m:8},{l:"В",g:4,m:5},{l:"А",g:16,m:30,a:1}]},
+    {id:"r2", name:"Лист 3", date:"2026-11-12", parts:[{l:"А",g:10,m:12},{l:"В",g:4,m:6}]},
+    {id:"r3", name:"Лист 4", date:"2026-11-12", parts:[{l:"А",g:7,m:10},{l:"Б",g:2,m:6},{l:"В",g:1,m:5}]},
+    {id:"r4", name:"Лист 5", date:"2026-11-12", parts:[{l:"А",g:6,m:10}]},
+    {id:"r5", name:"Лист 6", date:"2026-11-12", parts:[{l:"",g:12,m:16}]},
+    {id:"r6", name:"Лист 7", date:"2026-11-12", parts:[{l:"А",g:5,m:12}]},
+    {id:"r7", name:"Лист 9", date:"2026-11-12", parts:[{l:"А",g:8,m:12},{l:"Б",g:10,m:12}]},
+    {id:"r8", name:"Лист 10", date:"2026-11-12", parts:[{l:"",g:3,m:12}]},
+    {id:"r9", name:"Блок M: итоговый микс (раскрой скобки)", date:"2026-11-13", parts:[{l:"",g:11,m:20}]}
+  ],
+  log:[
+    {id:"j2", date:"2026-11-13", title:"Блоки M, K, L",
+     body:"Блок M (итоговый микс, раскрой скобки): 11/20.\nБлок K (письмо): рассказ о себе около 10 предложений, но только 3 времени (Present Simple, Past Simple, going to), нет Present Perfect и Present Continuous; мини-эссе «Why do I want to study abroad?» не закончено, первое предложение не по заданию.\nБлок L (говорение, Part 1): запись 7 минут, ответил почти на все 12 вопросов, но по 1–2 предложения вместо 3–4; Part 2 (монолог про бизнес) не записан.\n\nСлабые места: has opened и have applied для будущего; нет have в «They already pay»; «I live all my life» вместо have lived; gived вместо gave; «I study next year» вместо I'm going to study; will для решений «здесь и сейчас» (I'll take, I'll help); артикли и предлоги (go to school, a bakery chain, my own business); орфография business; в говорении don't like cooking, haven't travelled abroad, I don't have free time, advertising вместо reclama.\n\nСильные стороны: верно went, wrote, saw, is coming, are looking, doesn't like, have never been, hasn't finished, Do you get up; говорит живо, почти без пауз; использует entrepreneur, commercial, experience."},
+    {id:"j1", date:"2026-11-12", title:"Проверка листов 2–7, 9–10 и говорение (лист 11)",
+     body:"Проверено 12 ноября: листы 2, 3, 4, 5, 6, 7, 9, 10; говорение по листу 11 (запись 11 минут); листы 1 и 8 пока не присланы.\nЛист 2: Б 8/8, В 4/5, А около 16/30. Лист 3: А 10/12, В 4/6. Лист 4: А 7/10, Б 2/6, В 1/5. Лист 5: А 6/10. Лист 6: 12/16. Лист 7: А 5/12. Лист 9: А 8/12, Б 10/12. Лист 10: 3/12.\nСлабые места: V2 нерегулярных (do, give, have… [запись оборвана, продолжение допишем]"}
+  ]
+};
+function eng(){
+  if(!state.eng) state.eng = {seeded:false};
+  const e = state.eng;
+  e.ms = e.ms || {}; e.gd = e.gd || {}; e.days = e.days || {}; e.log = e.log || []; e.results = e.results || [];
+  if(!e.seeded){
+    e.seeded = true;
+    ENG_SEED.log.forEach(x => e.log.push({...x}));
+    ENG_SEED.results.forEach(x => e.results.push({...x, parts:x.parts.map(q => ({...q}))}));
+    ENG_SEED.ms.forEach(x => { if(x.done) e.ms[x.id] = true; });
+    save();
+  }
+  return e;
+}
+const ENG_ITEMS = [
+  {k:"l1", text:"Урок 1 (18:00)", habit:"Английский: урок"},
+  {k:"l2", text:"Урок 2 (21:00)", habit:"Английский: второй блок"},
+  {k:"w",  text:"10 новых слов", habit:"Словарь: новые слова"},
+  {k:"a",  text:"Anki 15–20 минут", habit:"Anki 15–20"}
+];
+function engHabit(it){ return state.habits.find(h => h.name.startsWith(it.habit) && !h.archived); }
+function engGet(it, key){ const h = engHabit(it); return h ? !!h.marks[key] : !!(eng().days[key] || {})[it.k]; }
+function engSet(it, key){
+  const h = engHabit(it);
+  if(h){ if(h.marks[key]) delete h.marks[key]; else h.marks[key] = h.target > 1 ? h.target : 1; }
+  else { const d = eng().days[key] = eng().days[key] || {}; d[it.k] = !d[it.k]; }
+}
+function fmtD(k){ const [y,m,d] = k.split("-"); return `${d}.${m}.${y.slice(2)}`; }
+function daysTo(k){ const [y,m,d] = k.split("-").map(Number), t = new Date(); t.setHours(0,0,0,0); return Math.round((new Date(y,m-1,d) - t)/864e5); }
+function scoreColor(r){ return r >= .8 ? "var(--green)" : r >= .5 ? "var(--gold)" : "var(--red)"; }
+function engHTML(){
+  const E = eng(), T = todayParts(), tk = T.iso;
+  const doneToday = ENG_ITEMS.filter(it => engGet(it, tk)).length, frac = doneToday / ENG_ITEMS.length;
+  // серия: подряд дней с обоими уроками
+  let streak = 0; const t0 = new Date(); t0.setHours(12,0,0,0);
+  for(let i = 0; i < 400; i++){
+    const dt = new Date(t0); dt.setDate(dt.getDate() - i); const k = iso(dt.getFullYear(), dt.getMonth(), dt.getDate());
+    const ok = engGet(ENG_ITEMS[0], k) && engGet(ENG_ITEMS[1], k);
+    if(ok) streak++; else if(i > 0) break;
+  }
+  const strip = Array.from({length:14}, (_,i) => {
+    const dt = new Date(t0); dt.setDate(dt.getDate() - (13 - i)); const k = iso(dt.getFullYear(), dt.getMonth(), dt.getDate());
+    const n = ENG_ITEMS.filter(it => engGet(it, k)).length; return `<i class="${n ? "l"+n : ""}" title="${k}">${dt.getDate()}</i>`;
+  }).join("");
+  const dl = daysTo("2027-03-31");
+  const hero = `<div class="eng-hero"><h2>Английский</h2>
+    <div class="small muted">${esc(ENG_SEED.goalTitle)}</div>
+    <div class="eng-row">
+      <div class="eng-ring">${ringSVG(frac, "var(--green-dark)")}<div class="val">${doneToday}/${ENG_ITEMS.length}<small>сегодня</small></div></div>
+      <div><span class="pill">Старт: A2</span><span class="pill">Цель: IELTS 5.5–6.0</span>
+        <span class="pill">До 31.03: ${dl > 0 ? dl+" дн." : "срок"}</span><span class="pill">Серия: ${streak} дн.</span>
+        <div class="small muted" style="margin-top:8px;line-height:1.5">Минимум для ZJSU — 5.5. Экзамен: запись в феврале. Сертификат нужен до 1 мая 2027.</div></div>
+    </div></div>`;
+  const today = `<div class="section-title"><span>Сегодня</span><span class="muted small">2 урока по часу, 10 слов, Anki</span></div>
+    <div class="card-plain">${ENG_ITEMS.map(it => { const on = engGet(it, tk);
+      return `<div class="chk ${on ? "done" : ""}"><button class="tick ${on ? "on" : ""}" data-act="engday" data-v="${it.k}">${on ? "✓" : ""}</button><div class="tx">${it.text}</div></div>`; }).join("")}
+      <div class="strip">${strip}</div><div class="small muted" style="margin-top:6px">Последние 14 дней: чем темнее, тем больше сделано.</div></div>`;
+  const ms = `<div class="section-title"><span>Контрольные точки</span></div><div class="card-plain">${ENG_SEED.ms.map(m => {
+    const on = !!E.ms[m.id], d = daysTo(m.date);
+    return `<div class="ms ${on ? "on" : ""}" data-act="engms" data-v="${m.id}" style="cursor:pointer"><div class="dot"></div>
+      <div style="flex:1"><div style="font-size:14px;${on ? "text-decoration:line-through;opacity:.6" : ""}">${esc(m.text)}</div>
+      <div class="small muted">${fmtD(m.date)}${on ? "" : d >= 0 ? " · осталось " + d + " дн." : " · срок прошёл"}</div></div></div>`; }).join("")}
+    <div class="small muted" style="margin-top:4px">Нажми на точку, чтобы отметить выполненной.</div></div>`;
+  const goals = `<div class="section-title"><span>Цели на ноябрь (к 30.11)</span></div><div class="card-plain">${ENG_SEED.goals.map(g => {
+    const on = !!E.gd[g.id]; return `<div class="chk ${on ? "done" : ""}"><button class="tick ${on ? "on" : ""}" data-act="enggoal" data-v="${g.id}">${on ? "✓" : ""}</button><div class="tx">${esc(g.text)}</div></div>`; }).join("")}</div>`;
+  const results = `<div class="section-title"><span>Результаты</span></div><div class="card-plain">${E.results.slice().sort((a,b) => b.date.localeCompare(a.date)).map(r => {
+    const g = r.parts.reduce((x,q) => x+q.g, 0), m = r.parts.reduce((x,q) => x+q.m, 0);
+    return `<div class="res"><div class="rh"><span>${esc(r.name)}</span><span class="muted small">${fmtD(r.date)}</span></div>
+      ${r.parts.map(q => `<div class="rp"><b>${esc(q.l || "")}</b><div class="bar2"><i style="width:${Math.round(q.g/q.m*100)}%;background:${scoreColor(q.g/q.m)}"></i></div><em>${q.a ? "≈" : ""}${q.g}/${q.m}</em></div>`).join("")}
+      ${r.parts.length > 1 ? `<div class="small muted" style="margin-top:4px">Итого ${g}/${m} · ${Math.round(g/m*100)}%</div>` : ""}</div>`; }).join("")}
+    <div class="res" style="color:var(--muted);font-size:13px">Листы 1 и 8 (V1, V2, V3): пока не присланы.</div>
+    <div class="addrow"><input type="text" id="rName" maxlength="40" placeholder="Что сдал (лист, блок)"><input type="number" id="rGot" placeholder="верно" style="width:70px"><input type="number" id="rMax" placeholder="из" style="width:60px"><button class="chip on" data-act="engres">+</button></div></div>`;
+  const log = `<div class="section-title"><span>Журнал занятий</span></div><div class="card-plain">
+    <div class="addrow" style="margin-top:0"><input type="date" id="jlDate" value="${tk}"><input type="text" id="jlTitle" maxlength="60" placeholder="Заголовок"></div>
+    <textarea id="jlBody" rows="3" maxlength="2000" placeholder="Что делали, слабые места, сильные стороны" style="margin-top:8px"></textarea>
+    <button class="wide" style="text-align:center;background:var(--ink);color:var(--bg);margin-top:8px" data-act="englog">Добавить запись</button>
+    <div style="margin-top:12px">${E.log.slice().sort((a,b) => b.date.localeCompare(a.date)).map((j,i) => `<details class="jr" ${i === 0 ? "open" : ""}><summary>${fmtD(j.date)} · ${esc(j.title)}</summary><div class="body">${esc(j.body)}</div></details>`).join("")}</div></div>`;
+  return `${hero}${today}${ms}${goals}${results}${log}`;
+}
+
 function render(){
   document.body.classList.toggle("dark", !!state.dark);
   document.querySelectorAll(".tabs [data-v]").forEach(b => b.classList.toggle("on", b.dataset.v === tab));
-  $("monthNav").style.display = (tab === "journal" || tab === "day") ? "none" : "";
-  $("subtitle").textContent = tab === "day" ? "Расписание" : tab === "year" ? String(view.year) : `${MONTHS[view.month]} ${view.year}`;
-  $("main").innerHTML = tab === "day" ? dayHTML() : tab === "track" ? trackHTML() : tab === "stats" ? statsHTML() : tab === "year" ? yearHTML() : journalHTML();
+  $("monthNav").style.display = (tab === "journal" || tab === "day" || tab === "eng") ? "none" : "";
+  $("subtitle").textContent = tab === "day" ? "Расписание" : tab === "eng" ? "Английский" : tab === "year" ? String(view.year) : `${MONTHS[view.month]} ${view.year}`;
+  $("main").innerHTML = tab === "day" ? dayHTML() : tab === "eng" ? engHTML() : tab === "track" ? trackHTML() : tab === "stats" ? statsHTML() : tab === "year" ? yearHTML() : journalHTML();
 }
 
 // ---------- navigation ----------
@@ -1040,6 +1189,17 @@ document.addEventListener("click", e => {
     case "subadd": { const v = $("sub-"+id).value.trim(); if(v) commit(() => { find(id).subtasks.push({id:uid(), text:v.slice(0,80), done:false}); }); break; }
     case "subt": { const sid = t.dataset.sid; commit(() => { const s = find(id).subtasks.find(x => x.id === sid); s.done = !s.done; }); break; }
     case "subdel": { const sid = t.dataset.sid; commit(() => { const h = find(id); h.subtasks = h.subtasks.filter(x => x.id !== sid); }); break; }
+    case "engday": { const it = ENG_ITEMS.find(x => x.k === t.dataset.v), k = todayParts().iso; commit(() => { engSet(it, k); }); break; }
+    case "engms": { const id = t.dataset.v; commit(() => { const m = eng().ms; if(m[id]) delete m[id]; else m[id] = true; }); break; }
+    case "enggoal": { const id = t.dataset.v; commit(() => { const m = eng().gd; if(m[id]) delete m[id]; else m[id] = true; }); break; }
+    case "engres": {
+      const nm = $("rName").value.trim(), g = Number($("rGot").value), m = Number($("rMax").value);
+      if(!nm || !(m > 0) || g < 0 || g > m){ toast("Заполни название и результат (верно не больше, чем из)"); break; }
+      commit(() => { eng().results.push({id:uid(), name:nm.slice(0,40), date:todayParts().iso, parts:[{l:"", g, m}]}); }, "Результат добавлен"); break; }
+    case "englog": {
+      const dt = $("jlDate").value, ti = $("jlTitle").value.trim(), bd = $("jlBody").value.trim();
+      if(!dt || !ti){ toast("Нужны дата и заголовок"); break; }
+      commit(() => { eng().log.push({id:uid(), date:dt, title:ti.slice(0,60), body:bd.slice(0,2000)}); }, "Запись добавлена"); break; }
     case "dayNav": dayOff += +t.dataset.v; editId = null; render(); break;
     case "dayToday": dayOff = 0; editId = null; render(); break;
     case "wake": { const k = curKey(); commit(() => { sched().wake[k] = t.dataset.v; }); break; }
