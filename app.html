@@ -170,6 +170,14 @@
   .nowbar{height:5px;border-radius:3px;background:var(--beige);margin-top:6px;overflow:hidden}
   .nowbar i{display:block;height:100%;background:var(--green)}
   .snow{background:var(--yellow);border-radius:var(--radius);padding:14px 16px;margin-top:12px}
+  .daynav{display:flex;align-items:center;gap:8px;margin-top:10px}
+  .daynav button{background:var(--card);border:none;border-radius:12px;height:34px;min-width:34px;padding:0 10px;font-size:16px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  .daytitle{flex:1;text-align:center;font-weight:600;font-size:15px}
+  .wakes{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .addrow{display:flex;gap:8px;margin-top:8px}
+  .addrow input,.wakes input{background:var(--empty);border:none;border-radius:10px;padding:9px 10px;font-size:14px}
+  .addrow input[type=text]{flex:1;min-width:0}
+  .xbtn{background:none;border:none;color:var(--muted);font-size:15px;padding:6px}
 </style>
 </head>
 <body>
@@ -764,7 +772,8 @@ function journalHTML(){
     ${entries}`;
 }
 
-const SCHEDULE = [
+// Будни: фиксированные блоки по часам
+const WEEKDAY = [
   {from:"05:00", to:"06:00", name:"Английский язык", icon:"🇬🇧", color:PALETTE[1]},
   {from:"06:20", to:"08:00", name:"Дорога в школу", icon:"🚌", color:PALETTE[3]},
   {from:"08:00", to:"15:25", name:"Школа", icon:"🏫", color:PALETTE[4]},
@@ -775,32 +784,78 @@ const SCHEDULE = [
   {from:"21:00", to:"21:30", name:"Книга", icon:"📖", color:PALETTE[5]},
   {from:"21:30", to:"23:00", name:"Свободное время", icon:"🌙", color:PALETTE[2]}
 ];
+// Выходные: утро считается от времени подъёма (минуты от подъёма), остальное по часам
+const WEEKEND_MORNING = [
+  {dur:20, name:"Подъём и зарядка", icon:"⚡", color:PALETTE[0]},
+  {dur:30, name:"Завтрак", icon:"🍳", color:PALETTE[5]},
+  {dur:60, name:"Английский язык", icon:"🇬🇧", color:PALETTE[1]},
+  {dur:60, name:"Математика", icon:"📐", color:PALETTE[3]}
+];
+const WEEKEND_FIXED = [
+  {from:"13:00", to:"14:00", name:"Обед", icon:"🍽️", color:PALETTE[5]},
+  {from:"14:00", to:"17:00", name:"Работа: помещения и звонки", icon:"💼", color:PALETTE[0]},
+  {from:"19:00", to:"21:00", name:"Проекты и работа", icon:"💼", color:PALETTE[0]},
+  {from:"21:00", to:"21:30", name:"Книга", icon:"📖", color:PALETTE[5]},
+  {from:"21:30", to:"23:00", name:"Свободное время", icon:"🌙", color:PALETTE[2]}
+];
+const WAKES = ["06:00","07:00","08:00","09:00","10:00"];
+const DOW = ["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"];
 function toMin(t){ const [h,m] = t.split(":").map(Number); return h*60+m; }
+function fromMin(x){ x = Math.max(0, Math.min(1439, x)); return String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0"); }
+function sched(){ if(!state.sched) state.sched = {wake:{}, extra:{}}; state.sched.wake = state.sched.wake || {}; state.sched.extra = state.sched.extra || {}; return state.sched; }
+let dayOff = 0;
+function dayDate(){ const d = new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+dayOff); return d; }
+function blocksFor(d, key){
+  const sc = sched(), wd = d.getDay(), weekend = wd === 0 || wd === 6;
+  let list;
+  if(weekend){
+    const wake = toMin(sc.wake[key] || "09:00"); let t = wake;
+    list = WEEKEND_MORNING.map(b => { const o = {from:fromMin(t), to:fromMin(t+b.dur), name:b.name, icon:b.icon, color:b.color}; t += b.dur; return o; })
+      .concat(WEEKEND_FIXED.map(b => ({...b})));
+  } else list = WEEKDAY.map(b => ({...b}));
+  (sc.extra[key] || []).forEach((e,i) => list.push({from:e.from, to:e.to, name:e.name, icon:e.icon || "📌", color:PALETTE[4], extra:true, ei:i}));
+  return {list: list.sort((a,b) => toMin(a.from) - toMin(b.from)), weekend};
+}
 function dayHTML(){
-  const n = new Date(), cur = n.getHours()*60 + n.getMinutes(), wd = n.getDay();
-  const weekend = wd === 0 || wd === 6;
-  let nowIdx = -1;
-  SCHEDULE.forEach((b,i) => { if(cur >= toMin(b.from) && cur < toMin(b.to)) nowIdx = i; });
-  const nextIdx = SCHEDULE.findIndex(b => toMin(b.from) > cur);
+  const n = new Date(), D = dayDate(), key = iso(D.getFullYear(), D.getMonth(), D.getDate());
+  const isToday = dayOff === 0, cur = n.getHours()*60 + n.getMinutes();
+  const {list, weekend} = blocksFor(D, key);
+  const label = isToday ? "Сегодня" : dayOff === 1 ? "Завтра" : dayOff === -1 ? "Вчера" : "";
+  let nowIdx = -1, nextIdx = -1;
+  if(isToday){
+    list.forEach((b,i) => { if(cur >= toMin(b.from) && cur < toMin(b.to)) nowIdx = i; });
+    nextIdx = list.findIndex(b => toMin(b.from) > cur);
+  }
+  const nav = `<div class="daynav"><button data-act="dayNav" data-v="-1">‹</button>
+    <div class="daytitle">${label ? label + ", " : ""}${DOW[D.getDay()]}, ${D.getDate()}.${String(D.getMonth()+1).padStart(2,"0")}</div>
+    <button data-act="dayNav" data-v="1">›</button>${isToday ? "" : `<button data-act="dayToday">Сегодня</button>`}</div>`;
   let head = "";
-  if(!weekend){
-    if(nowIdx >= 0){
-      const b = SCHEDULE[nowIdx], a = toMin(b.from), z = toMin(b.to), left = z - cur;
-      head = `<div class="snow"><div class="small muted">Сейчас</div><div style="font-size:19px;font-weight:700;margin-top:2px">${b.icon} ${esc(b.name)}</div>
-        <div class="small muted" style="margin-top:2px">до ${b.to}, осталось ${Math.floor(left/60) ? Math.floor(left/60)+" ч " : ""}${left%60} мин</div>
-        <div class="nowbar"><i style="width:${Math.round((cur-a)/(z-a)*100)}%"></i></div></div>`;
-    } else if(nextIdx >= 0){
-      const b = SCHEDULE[nextIdx];
-      head = `<div class="snow"><div class="small muted">Дальше</div><div style="font-size:19px;font-weight:700;margin-top:2px">${b.icon} ${esc(b.name)}</div><div class="small muted" style="margin-top:2px">в ${b.from}</div></div>`;
-    } else head = `<div class="snow"><div style="font-weight:700">День закончен 🌙</div><div class="small muted">Первый блок завтра в ${SCHEDULE[0].from}</div></div>`;
-  } else head = `<div class="snow"><div style="font-weight:700">Выходной</div><div class="small muted">Расписание ниже — для будней. Выходное пока не задано.</div></div>`;
-  const rows = SCHEDULE.map((b,i) => {
-    const cls = weekend ? "" : (i === nowIdx ? "now" : (toMin(b.to) <= cur ? "past" : ""));
+  if(isToday && nowIdx >= 0){
+    const b = list[nowIdx], a = toMin(b.from), z = toMin(b.to), left = z - cur;
+    head = `<div class="snow"><div class="small muted">Сейчас</div><div style="font-size:19px;font-weight:700;margin-top:2px">${b.icon} ${esc(b.name)}</div>
+      <div class="small muted" style="margin-top:2px">до ${b.to}, осталось ${Math.floor(left/60) ? Math.floor(left/60)+" ч " : ""}${left%60} мин</div>
+      <div class="nowbar"><i style="width:${Math.round((cur-a)/(z-a)*100)}%"></i></div></div>`;
+  } else if(isToday && nextIdx >= 0){
+    const b = list[nextIdx];
+    head = `<div class="snow"><div class="small muted">Дальше</div><div style="font-size:19px;font-weight:700;margin-top:2px">${b.icon} ${esc(b.name)}</div><div class="small muted" style="margin-top:2px">в ${b.from}</div></div>`;
+  } else if(isToday){
+    head = `<div class="snow"><div style="font-weight:700">День закончен 🌙</div></div>`;
+  }
+  const wakeBox = weekend ? `<div class="card-plain" style="margin-top:12px"><div class="small muted" style="margin-bottom:8px">Во сколько встаёшь? Утро сдвинется само</div>
+    <div class="wakes">${WAKES.map(w => `<button class="chip ${((sched().wake[key]||"09:00")===w)?"on":""}" data-act="wake" data-v="${w}">${w}</button>`).join("")}
+    <input type="time" id="wakeCustom" value="${sched().wake[key]||"09:00"}"><button class="chip" data-act="wakeCustom">ОК</button></div></div>` : "";
+  const rows = list.map((b,i) => {
+    const cls = !isToday ? "" : (i === nowIdx ? "now" : (toMin(b.to) <= cur ? "past" : ""));
     return `<div class="srow ${cls}"><div class="stime">${b.from}–${b.to}</div>
-      <div class="sdot" style="background:${b.color}33">${b.icon}</div><div class="sname">${esc(b.name)}</div></div>`;
+      <div class="sdot" style="background:${b.color}33">${b.icon}</div><div class="sname">${esc(b.name)}</div>
+      ${b.extra ? `<button class="xbtn" data-act="delBlock" data-v="${b.ei}" aria-label="Удалить">✕</button>` : ""}</div>`;
   }).join("");
-  return `${head}<div class="section-title"><span>Расписание на будни</span></div><div class="sch">${rows}</div>
-    <div class="tip">Чтобы поменять блоки, напиши Claude — он обновит расписание.</div>`;
+  const add = `<div class="card-plain" style="margin-top:12px"><div class="small muted" style="margin-bottom:8px">Добавить дело на этот день</div>
+    <div class="addrow"><input type="time" id="bFrom" value="12:00"><input type="time" id="bTo" value="13:00"></div>
+    <div class="addrow"><input type="text" id="bName" maxlength="40" placeholder="Что делаешь (например, смотреть помещение)">
+    <button class="chip on" data-act="addBlock">+</button></div></div>`;
+  return `${nav}${head}${wakeBox}<div class="section-title"><span>${weekend ? "Выходной" : "Будний день"}</span></div><div class="sch">${rows}</div>${add}
+    <div class="tip">${weekend ? "Утро считается от времени подъёма, остальное по часам." : "Будни по одному расписанию."} Любое дело на конкретный день добавляй снизу. Постоянные блоки поменяет Claude.</div>`;
 }
 setInterval(() => { if(tab === "day") render(); }, 60000);
 
@@ -808,7 +863,7 @@ function render(){
   document.body.classList.toggle("dark", !!state.dark);
   document.querySelectorAll(".tabs [data-v]").forEach(b => b.classList.toggle("on", b.dataset.v === tab));
   $("monthNav").style.display = (tab === "journal" || tab === "day") ? "none" : "";
-  $("subtitle").textContent = tab === "day" ? "Расписание дня" : tab === "year" ? String(view.year) : `${MONTHS[view.month]} ${view.year}`;
+  $("subtitle").textContent = tab === "day" ? "Расписание" : tab === "year" ? String(view.year) : `${MONTHS[view.month]} ${view.year}`;
   $("main").innerHTML = tab === "day" ? dayHTML() : tab === "track" ? trackHTML() : tab === "stats" ? statsHTML() : tab === "year" ? yearHTML() : journalHTML();
 }
 
@@ -926,6 +981,17 @@ document.addEventListener("click", e => {
     case "subadd": { const v = $("sub-"+id).value.trim(); if(v) commit(() => { find(id).subtasks.push({id:uid(), text:v.slice(0,80), done:false}); }); break; }
     case "subt": { const sid = t.dataset.sid; commit(() => { const s = find(id).subtasks.find(x => x.id === sid); s.done = !s.done; }); break; }
     case "subdel": { const sid = t.dataset.sid; commit(() => { const h = find(id); h.subtasks = h.subtasks.filter(x => x.id !== sid); }); break; }
+    case "dayNav": dayOff += +t.dataset.v; render(); break;
+    case "dayToday": dayOff = 0; render(); break;
+    case "wake": { const D = dayDate(), k = iso(D.getFullYear(), D.getMonth(), D.getDate()); commit(() => { sched().wake[k] = t.dataset.v; }); break; }
+    case "wakeCustom": { const v = $("wakeCustom").value; if(v){ const D = dayDate(), k = iso(D.getFullYear(), D.getMonth(), D.getDate()); commit(() => { sched().wake[k] = v; }); } break; }
+    case "addBlock": {
+      const f = $("bFrom").value, z = $("bTo").value, nm = $("bName").value.trim();
+      if(!f || !z || !nm || toMin(z) <= toMin(f)){ toast("Заполни время (конец позже начала) и название"); break; }
+      const D = dayDate(), k = iso(D.getFullYear(), D.getMonth(), D.getDate());
+      commit(() => { (sched().extra[k] = sched().extra[k] || []).push({from:f, to:z, name:nm.slice(0,40), icon:"📌"}); }, "Дело добавлено");
+      break; }
+    case "delBlock": { const D = dayDate(), k = iso(D.getFullYear(), D.getMonth(), D.getDate()); commit(() => { sched().extra[k].splice(+t.dataset.v, 1); }, "Удалено"); break; }
     case "rate": draft.rating = +t.dataset.v; render(); break;
     case "jsave": {
       const entry = { rating: draft.rating, text: draft.text.trim() };
