@@ -315,6 +315,8 @@ const MONTHS = ["январь","февраль","март","апрель","ма�
 // kind: "habit" = отмечаю каждый день, "goal" = цель или проект с шагами и сроком
 const SEED = [
   // ----- привычки -----
+  { kind:"habit", name:"Английский: минимум 2 часа в день", icon:"⭐", color:PALETTE[1], category:"Учёба", top:true,
+    target:120, unit:"мин", note:"Самое главное. Не меньше 120 минут английского каждый день: уроки, тесты, Anki, говорение — всё считается" },
   { kind:"habit", name:"Зарядка 10 мин", icon:"⚡", color:PALETTE[0], category:"Здоровье", reminder:"07:30",
     note:"Наклоны головы и круги плечами 30 с → приседания 45 с → выпады 8–10 на ногу → отжимания от стены или стола 1 мин → махи руками с захлёстом голени 45 с → круги бедром 10 раз на сторону → планка 20–30 с → потяжка 30 с" },
   { kind:"habit", name:"Английский: урок 18:00", icon:"🇬🇧", color:PALETTE[1], category:"Учёба", reminder:"18:00",
@@ -342,6 +344,9 @@ const SEED = [
   { kind:"goal", name:"Поступление: бакалавриат с сентября 2027", icon:"🎓", color:PALETTE[4], category:"Поступление", deadline:"2027-02-28",
     note:"Англоязычный бизнес-бакалавриат. Lingnan — основной раунд до 28 февраля 2027",
     subtasks:["Lingnan (Гонконг): подать в основной раунд","NUCB (Япония): подать","MUST (Макао): подать","Özyeğin (Турция): написать через WhatsApp","Гранты: эссе и рекомендации","Рекомендательное письмо от учителя: получить","Шорт-лист вузов Китая: 8–10 вариантов","Поездка: Пекин, Шанхай, Вэньчжоу (после 18 декабря, даты уточнить)","Найти представителя вуза для встречи"] },
+  { kind:"goal", name:"Тест от Остапа", icon:"📝", color:PALETTE[1], category:"Учёба", deadline:"2026-11-17",
+    note:"english_test_heb_9_2026.pdf (папка «english with Ostap» на рабочем столе): 5 заданий, 25 вопросов. Сдать до урока во вторник 17.11 в 20:00",
+    subtasks:["Задание 1","Задание 2","Задание 3","Задание 4","Задание 5","Проверить ответы и отправить Остапу"] },
   { kind:"goal", name:"Английский: IELTS 6.0–6.5", icon:"🇬🇧", color:PALETTE[1], category:"Учёба", deadline:"2027-05-31",
     note:"Сейчас A2. Позже для перевода в США — TOEFL 90+",
     subtasks:["Выбрать экзамен: IELTS или TOEFL","Разобрать времена (has / was)","Пройти Murphy Intermediate","Карточки для слов (Anki или бот)","Говорение: 2 минуты вслух каждый день","Первый пробный тест — замер"] },
@@ -418,7 +423,7 @@ let state = load();
   const NEW = ["Чтение книги 20:40","Anki 15–20 мин"];
   if(!state.seedSeen) state.seedSeen = SEED.map(x => x.name).filter(n => !NEW.includes(n));
   const have = new Set(state.habits.map(h => h.name));
-  SEED.forEach(x => { if(!state.seedSeen.includes(x.name)){ if(!have.has(x.name)) state.habits.push(fromSeed(x)); state.seedSeen.push(x.name); } });
+  SEED.forEach(x => { if(!state.seedSeen.includes(x.name)){ if(!have.has(x.name)) (x.top ? state.habits.unshift(fromSeed(x)) : state.habits.push(fromSeed(x))); state.seedSeen.push(x.name); } });
 })();
 let view = { year:new Date().getFullYear(), month:new Date().getMonth() };
 let tab = "track", filter = "Все", editing = null, ef = {color:PALETTE[0], days:[]};
@@ -850,14 +855,23 @@ function sched(){
   return s;
 }
 // Известные дела на конкретные даты (добавляются один раз, потом это обычные дела: можно править и удалять)
-const DATED = { "2026-11-14": { wake:"07:00", extra:[
-  {from:"12:00", to:"12:30", name:"Golden Rent: решить про ответы сетей", icon:"💼"},
-  {from:"13:00", to:"14:00", name:"Просмотр помещения", icon:"🏢"} ] } };
+const DATED = {
+  "2026-11-14": { wake:"07:00", extra:[
+    {from:"12:00", to:"12:30", name:"Golden Rent: решить про ответы сетей", icon:"💼"},
+    {from:"13:00", to:"14:00", name:"Просмотр помещения", icon:"🏢"} ] },
+  "2026-11-16": { tasks:["Тест от Остапа: начать (5 заданий, 25 вопросов)"] },
+  "2026-11-17": { extra:[
+    {from:"20:00", to:"21:00", name:"Английский: урок с Остапом", icon:"🇬🇧"} ],
+    tasks:["Тест от Остапа: доделать и сдать до 20:00"] }
+};
 function seedDay(key){
   const sc = sched(); if(sc.seeded[key] || !DATED[key]) return;
   sc.seeded[key] = 1; const d = DATED[key];
   if(d.wake && !sc.wake[key]) sc.wake[key] = d.wake;
-  if(d.extra) sc.extra[key] = (sc.extra[key] || []).concat(d.extra.map(e => ({...e})));
+  if(d.extra){ const pb = sc.plans[key] && sc.plans[key].blocks;
+    if(pb) d.extra.forEach(e => pb.push({id:uid(), from:e.from, to:e.to, name:e.name, icon:e.icon || "📌", done:false}));
+    else sc.extra[key] = (sc.extra[key] || []).concat(d.extra.map(e => ({...e}))); }
+  if(d.tasks){ const pl = plan(key); d.tasks.forEach(t => { if(!pl.tasks.some(q => q.text === t)) pl.tasks.push({id:uid(), text:t.slice(0,80), done:false}); }); }
   save();
 }
 let dayOff = 0, editId = null;
