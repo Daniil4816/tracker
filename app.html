@@ -295,6 +295,7 @@
       <button class="wide" data-act="theme">Тёмная тема</button>
       <button class="wide" data-act="notify">Включить уведомления</button>
       <button class="wide" data-act="seed">Добавить мои задачи и цели из плана</button>
+      <button class="wide" data-act="exportIcs">📅 Напоминания в календарь телефона</button>
       <button class="wide" data-act="exportCsv">Экспорт в CSV (для Excel и Numbers)</button>
       <button class="wide" data-act="exportJson">Резервная копия (файл JSON)</button>
       <button class="wide" data-act="import">Восстановить из файла JSON</button>
@@ -1146,6 +1147,53 @@ function download(blob, name){
   a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+// ---------- calendar export (.ics): reminders arrive from the phone's Calendar even when the page is closed ----------
+function exportIcs(){
+  const BYDAY = ["SU","MO","TU","WE","TH","FR","SA"];   // index = JS getDay()
+  const T = todayParts(), today = T.iso.replace(/-/g, "");
+  const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
+  const esc = s => String(s || "").replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
+  const title = h => (h.icon ? h.icon + " " : "") + h.name;
+  const out = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//tracker//RU","CALSCALE:GREGORIAN","METHOD:PUBLISH",
+    "X-WR-CALNAME:Трекер целей","X-WR-TIMEZONE:Europe/Moscow",
+    "BEGIN:VTIMEZONE","TZID:Europe/Moscow","BEGIN:STANDARD","DTSTART:19700101T000000",
+    "TZOFFSETFROM:+0300","TZOFFSETTO:+0300","TZNAME:MSK","END:STANDARD","END:VTIMEZONE"];
+  let n = 0;
+  state.habits.forEach(h => {
+    if(h.archived) return;
+    if(h.kind !== "goal" && h.reminder){
+      const days = (h.type === "daily" ? [0,1,2,3,4,5,6] : (h.days || [])).slice();
+      if(!days.length) return;
+      const rule = days.length === 7 ? "FREQ=DAILY" : "FREQ=WEEKLY;BYDAY=" + days.map(d => BYDAY[d]).join(",");
+      const hm = h.reminder.replace(":", "") + "00";
+      out.push("BEGIN:VEVENT", `UID:habit-${h.id}@tracker`, `DTSTAMP:${stamp}`,
+        `DTSTART;TZID=Europe/Moscow:${today}T${hm}`, "DURATION:PT15M", `RRULE:${rule}`,
+        `SUMMARY:${esc(title(h))}`, `DESCRIPTION:${esc(h.note || "Пора отметить в трекере")}`,
+        "BEGIN:VALARM","ACTION:DISPLAY",`DESCRIPTION:${esc(title(h))}`,"TRIGGER:PT0M","END:VALARM","END:VEVENT");
+      n++;
+    }
+    if(h.kind === "goal" && h.deadline && h.deadline >= T.iso){
+      const d = h.deadline.replace(/-/g, "");
+      out.push("BEGIN:VEVENT", `UID:goal-${h.id}@tracker`, `DTSTAMP:${stamp}`,
+        `DTSTART;VALUE=DATE:${d}`, "DURATION:P1D", `SUMMARY:${esc("Срок: " + title(h))}`,
+        "BEGIN:VALARM","ACTION:DISPLAY",`DESCRIPTION:${esc("Через неделю срок: " + h.name)}`,"TRIGGER:-P7D","END:VALARM",
+        "BEGIN:VALARM","ACTION:DISPLAY",`DESCRIPTION:${esc("Завтра срок: " + h.name)}`,"TRIGGER:-PT15H","END:VALARM","END:VEVENT");
+      n++;
+    }
+  });
+  out.push("END:VCALENDAR");
+  if(!n){ toast("Нет привычек со временем напоминания и целей со сроком"); return; }
+  const body = out.map(l => { // fold lines longer than 75 bytes, as the format requires
+    const parts = []; let cur = "", bytes = 0;
+    for(const ch of l){ const b = new TextEncoder().encode(ch).length;
+      if(bytes + b > 73){ parts.push(cur); cur = " "; bytes = 1; }
+      cur += ch; bytes += b; }
+    parts.push(cur); return parts.join("\r\n");
+  }).join("\r\n") + "\r\n";
+  download(new Blob([body], {type:"text/calendar;charset=utf-8"}), `tracker-${T.iso}.ics`);
+  toast(`В календарь: ${n} напоминаний. Открой скачанный файл и нажми «Добавить все»`);
+}
+
 function exportCsv(){
   const rows = ["дата;привычка;значение;выполнено"];
   state.habits.forEach(h => {
@@ -1248,6 +1296,7 @@ document.addEventListener("click", e => {
       else Notification.requestPermission().then(p => toast(p === "granted" ? "Уведомления включены" : "Уведомления не разрешены"));
       break;
     case "seed": { let added = 0; commit(() => { added = addSeed(); }); toast(added ? `Добавлено: ${added}` : "Всё уже на месте", !!added); break; }
+    case "exportIcs": exportIcs(); break;
     case "exportCsv": exportCsv(); break;
     case "exportJson": exportJson(); break;
     case "import": $("importFile").click(); break;
