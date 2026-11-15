@@ -295,6 +295,7 @@
       <button class="wide" data-act="theme">Тёмная тема</button>
       <button class="wide" data-act="notify">Включить уведомления</button>
       <button class="wide" data-act="seed">Добавить мои задачи и цели из плана</button>
+      <button class="wide" data-act="engMin">🇬🇧 Минуты из приложения английского</button>
       <button class="wide" data-act="exportIcs">📅 Напоминания в календарь телефона</button>
       <button class="wide" data-act="exportCsv">Экспорт в CSV (для Excel и Numbers)</button>
       <button class="wide" data-act="exportJson">Резервная копия (файл JSON)</button>
@@ -1219,6 +1220,22 @@ function exportIcs(){
   toast(`В календарь: ${n} напоминаний. Открой скачанный файл и нажми «Добавить все»`);
 }
 
+// ---------- минуты из приложения «English: тексты и слова» (кнопка «Перенести минуты в трекер» копирует ENGMIN {...}) ----------
+async function importEngMin(){
+  let txt = "";
+  try{ txt = await Promise.race([navigator.clipboard.readText(), new Promise(r => setTimeout(() => r(""), 1500))]); }catch(e){}
+  if(!/ENGMIN\s*\{/.test(txt || "")) txt = prompt("Вставь код из приложения английского (начинается с ENGMIN)") || "";
+  const m = txt.match(/ENGMIN\s*(\{[\s\S]*\})/);
+  if(!m){ toast("Код не найден: в приложении нажми «Перенести минуты в трекер»"); return; }
+  let data; try{ data = JSON.parse(m[1]); }catch(e){ toast("Код повреждён, скопируй ещё раз"); return; }
+  let n = 0;
+  commit(() => {
+    let h = state.habits.find(q => q.name === "Английский: минимум 2 часа в день" && !q.archived);
+    if(!h){ const s = SEED.find(q => q.name === "Английский: минимум 2 часа в день"); if(!s) return; h = fromSeed(s); state.habits.unshift(h); }
+    Object.entries(data).forEach(([k, v]) => { v = Math.round(+v || 0); if(/^\d{4}-\d{2}-\d{2}$/.test(k) && v > (h.marks[k] || 0)){ h.marks[k] = v; n++; } });
+  });
+  toast(n ? `Английский: обновлено дней — ${n}` : "Всё уже перенесено");
+}
 function exportCsv(){
   const rows = ["дата;привычка;значение;выполнено"];
   state.habits.forEach(h => {
@@ -1322,6 +1339,7 @@ document.addEventListener("click", e => {
       break;
     case "seed": { let added = 0; commit(() => { added = addSeed(); }); toast(added ? `Добавлено: ${added}` : "Всё уже на месте", !!added); break; }
     case "exportIcs": exportIcs(); break;
+    case "engMin": importEngMin(); break;
     case "exportCsv": exportCsv(); break;
     case "exportJson": exportJson(); break;
     case "import": $("importFile").click(); break;
