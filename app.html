@@ -316,13 +316,13 @@ const MONTHS = ["январь","февраль","март","апрель","ма�
 const SEED = [
   // ----- привычки -----
   { kind:"habit", name:"Английский: минимум 2 часа в день", icon:"⭐", color:PALETTE[1], category:"Учёба", top:true,
-    target:120, unit:"мин", note:"Самое главное. Не меньше 120 минут английского каждый день: уроки, тесты, Anki, говорение — всё считается" },
+    target:120, unit:"мин", note:"Самое главное. Не меньше 120 минут английского каждый день: уроки, тесты, Anki, говорение — всё считается. Переводить тексты и запоминать слова" },
   { kind:"habit", name:"Зарядка 10 мин", icon:"⚡", color:PALETTE[0], category:"Здоровье", reminder:"07:30",
     note:"Наклоны головы и круги плечами 30 с → приседания 45 с → выпады 8–10 на ногу → отжимания от стены или стола 1 мин → махи руками с захлёстом голени 45 с → круги бедром 10 раз на сторону → планка 20–30 с → потяжка 30 с" },
   { kind:"habit", name:"Английский: урок 18:00", icon:"🇬🇧", color:PALETTE[1], category:"Учёба", reminder:"18:00",
-    note:"Час занятий. Новые слова сразу в словарь" },
+    note:"Час занятий. Переводить тексты и запоминать слова. Новые слова сразу в словарь" },
   { kind:"habit", name:"Английский: второй блок 21:00", icon:"🇬🇧", color:PALETTE[1], category:"Учёба", reminder:"21:00",
-    note:"Час занятий, включая выходные. Говорение: 2 минуты вслух" },
+    note:"Час занятий, включая выходные. Переводить тексты и запоминать слова. Говорение: 2 минуты вслух" },
   { kind:"habit", name:"Математика 19:30", icon:"📐", color:PALETTE[3], category:"Учёба", reminder:"19:30",
     note:"Час в день: сначала базовые темы, потом CSCA" },
   { kind:"habit", name:"Чтение книги 20:40", icon:"📖", color:PALETTE[5], category:"Развитие", reminder:"20:40",
@@ -424,6 +424,12 @@ let state = load();
   if(!state.seedSeen) state.seedSeen = SEED.map(x => x.name).filter(n => !NEW.includes(n));
   const have = new Set(state.habits.map(h => h.name));
   SEED.forEach(x => { if(!state.seedSeen.includes(x.name)){ if(!have.has(x.name)) (x.top ? state.habits.unshift(fromSeed(x)) : state.habits.push(fromSeed(x))); state.seedSeen.push(x.name); } });
+})();
+(function engNotes(){ // добавляет «переводить тексты и запоминать слова» в напоминания про английский
+  if(state.engNoteV >= 1) return; state.engNoteV = 1;
+  state.habits.forEach(h => { if(/^Английский: (урок|второй блок|минимум)/.test(h.name) && !/Переводить тексты/i.test(h.note || ""))
+    h.note = (h.note ? h.note.replace(/\.?\s*$/, ". ") : "") + "Переводить тексты и запоминать слова"; });
+  save();
 })();
 let view = { year:new Date().getFullYear(), month:new Date().getMonth() };
 let tab = "track", filter = "Все", editing = null, ef = {color:PALETTE[0], days:[]};
@@ -862,17 +868,22 @@ const DATED = {
   "2026-11-16": { tasks:["Тест от Остапа: начать (5 заданий, 25 вопросов)"] },
   "2026-11-17": { extra:[
     {from:"20:00", to:"21:00", name:"Английский: урок с Остапом", icon:"🇬🇧"} ],
-    tasks:["Тест от Остапа: доделать и сдать до 20:00"] }
+    tasks:["Тест от Остапа: доделать и сдать до 20:00"] },
+  "2026-11-17#move": { move:[{name:"Работа", from:"19:00", to:"20:00"}] }
 };
 function seedDay(key){
-  const sc = sched(); if(sc.seeded[key] || !DATED[key]) return;
-  sc.seeded[key] = 1; const d = DATED[key];
-  if(d.wake && !sc.wake[key]) sc.wake[key] = d.wake;
-  if(d.extra){ const pb = sc.plans[key] && sc.plans[key].blocks;
-    if(pb) d.extra.forEach(e => pb.push({id:uid(), from:e.from, to:e.to, name:e.name, icon:e.icon || "📌", done:false}));
-    else sc.extra[key] = (sc.extra[key] || []).concat(d.extra.map(e => ({...e}))); }
-  if(d.tasks){ const pl = plan(key); d.tasks.forEach(t => { if(!pl.tasks.some(q => q.text === t)) pl.tasks.push({id:uid(), text:t.slice(0,80), done:false}); }); }
-  save();
+  const sc = sched(); let changed = false;
+  Object.keys(DATED).filter(k => k === key || k.startsWith(key + "#")).forEach(id => {
+    if(sc.seeded[id]) return; sc.seeded[id] = 1; changed = true; const d = DATED[id];
+    if(d.wake && !sc.wake[key]) sc.wake[key] = d.wake;
+    if(d.extra){ const pb = sc.plans[key] && sc.plans[key].blocks;
+      if(pb) d.extra.forEach(e => pb.push({id:uid(), from:e.from, to:e.to, name:e.name, icon:e.icon || "📌", done:false}));
+      else sc.extra[key] = (sc.extra[key] || []).concat(d.extra.map(e => ({...e}))); }
+    if(d.tasks){ const pl = plan(key); d.tasks.forEach(t => { if(!pl.tasks.some(q => q.text === t)) pl.tasks.push({id:uid(), text:t.slice(0,80), done:false}); }); }
+    if(d.move){ materialize(key); const pb = plan(key).blocks;
+      d.move.forEach(m => { const b = pb.find(q => q.name === m.name); if(b){ b.from = m.from; b.to = m.to; } }); }
+  });
+  if(changed) save();
 }
 let dayOff = 0, editId = null;
 function dayDate(){ const d = new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+dayOff); return d; }
