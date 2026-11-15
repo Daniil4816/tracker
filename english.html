@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>English</title>
+<meta name="apple-mobile-web-app-title" content="English">
+<link rel="apple-touch-icon" href="english-icon.png">
+<link rel="icon" href="english-icon.png">
+<style>
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#F6F3EE;font:17px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#22201C;text-align:center}
+.box{padding:24px;max-width:360px}
+img{width:96px;height:96px;border-radius:22px}
+a.btn{display:block;margin-top:18px;background:#2F6B4F;color:#fff;text-decoration:none;padding:14px;border-radius:14px;font-weight:600}
+p{color:#8A847A;font-size:14px}
+</style>
+</head>
+<body>
+<div class="box">
+  <img src="english-icon.png" alt="">
+  <h1 style="font-size:22px;margin:12px 0 0">English: тексты и слова</h1>
+  <a class="btn" id="go" href="https://claude.ai/artifact/KWmPwiro3fuBPdt9VpAaKK">Открыть</a>
+  <p>Приложение работает в Claude: нужен вход в аккаунт Claude. Добавь эту страницу на экран «Домой» — будет иконка.</p>
+</div>
+<script>
+// с иконки на экране «Домой» сразу открываем приложение
+if (window.navigator.standalone || matchMedia("(display-mode: standalone)").matches) location.href = document.getElementById("go").href;
+</script>
+</body>
+</html>
