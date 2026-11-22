@@ -2,44 +2,90 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Бизнес-академия</title>
 <meta name="apple-mobile-web-app-title" content="Академия">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0c0c0e">
 <link rel="apple-touch-icon" href="academy-icon.png">
 <link rel="icon" href="academy-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f4ef;--card:#fff;--ink:#1d1c1a;--mut:#6b6760;--acc:#1d4ed8;--acc2:#c2410c;--line:#e4e0d8;--ok:#15803d;--bad:#b91c1c}
-@media (prefers-color-scheme:dark){:root{--bg:#161513;--card:#22201d;--ink:#eeeae2;--mut:#a29d93;--line:#38352f;--acc:#60a5fa;--acc2:#fb923c;--ok:#4ade80;--bad:#f87171}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,system-ui,Segoe UI,Roboto,sans-serif}
-main{max-width:720px;margin:auto;padding:12px 16px 80px}
-h1{font-size:24px;margin:12px 0 2px}h2{font-size:19px;margin:6px 0}h3{font-size:16px;margin:0 0 6px}
+:root{--bg:#0c0c0e;--card:#151518;--card2:#1c1c20;--ink:#f3efe6;--mut:#8f8a80;--gold:#d6b25e;--gold2:#a8833a;--line:#2a2a2f;--ok:#5fbf7f;--bad:#e06a5f}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,-apple-system,system-ui,sans-serif;padding-top:env(safe-area-inset-top)}
+main{max-width:640px;margin:auto;padding:14px 18px calc(96px + env(safe-area-inset-bottom))}
+.serif{font-family:"Playfair Display",Georgia,serif}
+h1{font:700 28px/1.2 "Playfair Display",Georgia,serif;margin:10px 0 4px}
+h2{font:700 21px/1.25 "Playfair Display",Georgia,serif;margin:4px 0 8px}
+h3{font-size:16px;margin:0 0 6px;font-weight:600}
 .mut{color:var(--mut);font-size:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:10px 0}
-.blk{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);margin:20px 0 4px}
-.sph{display:flex;align-items:center;gap:12px;cursor:pointer}
-.sph .num{flex:none;width:34px;height:34px;border-radius:10px;background:color-mix(in srgb,var(--acc) 14%,transparent);color:var(--acc);display:flex;align-items:center;justify-content:center;font-weight:700}
-.sph .t{flex:1}.sph .lv{font-size:12px;padding:3px 8px;border-radius:6px;background:var(--line);white-space:nowrap}
-.lv.l0{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}.lv.l1{background:color-mix(in srgb,var(--acc2) 15%,transparent);color:var(--acc2)}.lv.l2{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
-.btn{display:inline-block;border:0;background:var(--acc);color:#fff;font-weight:600;border-radius:12px;padding:13px 18px;margin:10px 8px 0 0;font-size:16px;text-decoration:none}
-.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}.btn.w{width:100%;text-align:center}
-.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:12px;margin:8px 0;font-size:15px}
-.opt.good{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}.opt.badc{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent)}
-.steps{display:flex;gap:4px;margin:6px 0}.steps i{flex:1;height:5px;border-radius:5px;background:var(--line)}.steps i.on{background:var(--acc)}
-textarea{width:100%;font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-height:110px}
-.back{background:none;border:0;color:var(--acc);font-size:16px;padding:8px 0}
-.map{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
-.map div{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;background:var(--line);color:var(--mut)}
-.map .l0{background:var(--bad);color:#fff}.map .l1{background:var(--acc2);color:#fff}.map .l2{background:var(--ok);color:#fff}
-ul.core{padding-left:18px;margin:6px 0}ul.core li{margin:6px 0}
-pre{white-space:pre-wrap;font:13px/1.45 ui-monospace,Menlo,monospace;background:var(--bg);padding:10px;border-radius:8px}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;display:none;z-index:9}
+.gold{color:var(--gold)}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin:12px 0}
+.card.hl{background:linear-gradient(160deg,#1f1b12 0%,#151518 60%);border-color:#3a3220}
+.row{display:flex;align-items:center;gap:12px}
+.grow{flex:1;min-width:0}
+.btn{display:block;width:100%;text-align:center;border:0;background:linear-gradient(180deg,var(--gold),var(--gold2));color:#141414;font-weight:700;border-radius:14px;padding:14px 18px;margin-top:12px;font-size:16px;font-family:inherit}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:600}
+.btn:disabled{opacity:.4}
+.pill{display:inline-block;font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--mut);margin:0 6px 6px 0}
+.pill.g{border-color:#4a3e22;color:var(--gold);background:#1d1910}
+.pill.ok{border-color:#24482f;color:var(--ok)}
+.bar{height:6px;background:#26262b;border-radius:9px;overflow:hidden;margin:10px 0 4px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:9px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.stat b{display:block;font:700 22px "Playfair Display",serif;color:var(--gold)}.stat span{font-size:12px;color:var(--mut)}
+.item{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+.item:first-of-type{border-top:0}
+.ic{flex:none;width:40px;height:40px;border-radius:12px;background:var(--card2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:18px}
+.ic.done{background:#1d1910;border-color:#4a3e22}
+.chev{color:var(--mut)}
+.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(12,12,14,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;padding:8px 6px calc(8px + env(safe-area-inset-bottom));z-index:20}
+.tabs button{flex:1;background:none;border:0;color:var(--mut);font:500 11px Inter,sans-serif;display:flex;flex-direction:column;align-items:center;gap:3px}
+.tabs button span{font-size:20px;filter:grayscale(1);opacity:.6}
+.tabs button.on{color:var(--gold)}.tabs button.on span{filter:none;opacity:1}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--card2);color:var(--ink);border-radius:12px;padding:13px;margin:8px 0;font:15px Inter,sans-serif}
+.opt.good{border-color:var(--ok);background:#13241a}.opt.badc{border-color:var(--bad);background:#2a1513}
+input[type=number],input[type=text],textarea{width:100%;font:16px Inter,sans-serif;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--ink)}
+textarea{min-height:110px}
+.lesson-card{min-height:52vh;display:flex;flex-direction:column}
+.lesson-card .body{flex:1;font-size:17px;line-height:1.6}
+.lesson-card .body b{color:var(--gold)}
+.dots{display:flex;gap:5px;margin:4px 0 14px}.dots i{flex:1;height:4px;border-radius:4px;background:#2a2a2f}.dots i.on{background:var(--gold)}
+.term{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}.term em{color:var(--gold);font-style:normal;text-align:right}
+.back{background:none;border:0;color:var(--gold);font:600 16px Inter,sans-serif;padding:6px 0}
+.map{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.map div{aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;background:var(--card2);color:var(--mut);border:1px solid var(--line)}
+.map .l0{background:#3a1714;color:#ffb4aa;border-color:#5a2520}.map .l1{background:#3a2c12;color:#f3cf7a;border-color:#5a4520}.map .l2{background:#163021;color:#9be3b4;border-color:#25503a}
+.ach{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.ach div{text-align:center;font-size:11px;color:var(--mut)}
+.ach div b{display:flex;align-items:center;justify-content:center;width:56px;height:56px;margin:0 auto 6px;border-radius:50%;font-size:24px;background:var(--card2);border:1px solid var(--line);filter:grayscale(1);opacity:.45}
+.ach div.on{color:var(--ink)}.ach div.on b{filter:none;opacity:1;border-color:var(--gold);background:#1d1910}
+.week{padding:12px 0;border-top:1px solid var(--line)}.week:first-child{border-top:0}
+.week.cur{background:#1d1910;margin:0 -18px;padding:12px 18px;border-top-color:#4a3e22}
+.ov{position:fixed;inset:0;background:var(--bg);z-index:40;display:none;flex-direction:column}
+.ov.on{display:flex}.ov .bar2{display:flex;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;border-bottom:1px solid var(--line)}
+.ov iframe{flex:1;border:0;width:100%;background:#f6f4ef}
+.toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top));transform:translateX(-50%);background:linear-gradient(180deg,var(--gold),var(--gold2));color:#141414;font-weight:700;padding:10px 18px;border-radius:12px;font-size:14px;display:none;z-index:50;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+pre{white-space:pre-wrap;font:13px/1.45 ui-monospace,Menlo,monospace;background:var(--card2);padding:12px;border-radius:12px;color:#cfcac0}
+ul.core{padding-left:18px;margin:6px 0}ul.core li{margin:7px 0}
+a{color:var(--gold)}
 </style>
 </head>
-<body><main id="app"></main><div class="toast" id="toast"></div>
+<body>
+<main id="app"></main>
+<nav class="tabs" id="tabs">
+<button data-t="today" class="on"><span>☀️</span>Сегодня</button>
+<button data-t="plan"><span>🗺️</span>План</button>
+<button data-t="spheres"><span>🏛️</span>Сферы</button>
+<button data-t="me"><span>🏆</span>Профиль</button>
+</nav>
+<div class="ov" id="ov"><div class="bar2"><b class="serif">ЦП-тренажёр</b><button class="back" id="ovx">Готово</button></div><iframe id="ovf" title="ЦП-тренажёр"></iframe></div>
+<div class="toast" id="toast"></div>
 <script>
-const BLOCKS=["Создать то, что купят","Продать","Управлять деньгами и бизнесом","Расти"];
-/* сфера: n — название, b — блок, link — отдельный тренажёр, core — ключевые понятия, q — [вопрос,[варианты],верный,пояснение], t — практические задания */
 const SP=[
 {n:"Ценностные предложения",b:0,link:"vp.html",core:["Профиль клиента: работы, боли, выгоды","Карта ценности: продукты, обезболивающие, создатели выгод","Формула: кто → боль → измеримый результат → отличие от альтернативы","Тест подстановки: подставь конкурента — если правда, переделывай","12 приёмов прорыва: убрать боль целиком, плата за результат, ускорить в 10 раз…"],
 q:[["Что относится к профилю клиента?",["Продукты и услуги","Работы, боли, выгоды","Каналы продаж"],1,"Профиль клиента — правая часть канвы: работы, боли, выгоды."],
@@ -161,58 +207,202 @@ q:[["FOB означает, что…",["Продавец доставляет д
 ["Что важнее всего на старте работы с китайским поставщиком?",["Самая низкая цена","Отношения, проверка фабрики и образцы","Красивый сайт"],1,"Дешёвый поставщик без проверки — дорогая ошибка."]],
 t:["Распиши цепочку поставки обуви из Вэньчжоу в США: этапы, документы, кто за что платит при FOB.","Как ты проверишь новую фабрику за 1 день визита? 7 пунктов."]}
 ];
-SP.forEach(s=>{if(!s.link)s.link=null});
 
-/* state */
-const K='academy1';
-let S=(()=>{try{return JSON.parse(localStorage.getItem(K))||{}}catch(e){return {}}})();S.res=S.res||{};S.ans=S.ans||{};
-const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+/* ===== РАНГИ, ДОСТИЖЕНИЯ ===== */
+const RANKS=[["Стажёр",0],["Основатель",500],["CEO",1500],["Серийный предприниматель",3500],["Инвестор",7000]];
+const ACH=[
+["first","🎓","Первый урок",s=>s.lessons>=1],
+["s7","🔥","7 дней подряд",s=>s.streak>=7],
+["s30","💎","30 дней подряд",s=>s.streak>=30],
+["real5","🛠️","5 дел в реальной жизни",s=>s.real>=5],
+["proj1","📐","Первый проект",s=>s.projects>=1],
+["vp10","💡","10 ЦП-тренировок",s=>s.vp>=10],
+["master","🏅","Мастер сферы",s=>s.mastered>=1],
+["ceo","👑","Ранг CEO",s=>s.xp>=1500]
+];
+const XP={lesson:30,taskOk:20,taskTry:5,real:40,project:150,vp:40};
+const START='2026-11-23';
+
+/* ===== ПЛАН НА 12 НЕДЕЛЬ ===== */
+const PLAN=[
+{sp:6,t:"Финансы: основы",l:["Прибыль ≠ деньги","P&L — отчёт о прибылях","ДДС — движение денег","Точка безубыточности","Баланс"],p:"Финмодель пекарни у станции МЦД"},
+{sp:6,t:"Финансы: модель и решения",l:["Финмодель за 1 час","Юнит-экономика внутри модели","Оборотный капитал","Окупаемость и ROI","5 финансовых KPI"],p:"Финмодель сорсинга из Вэньчжоу"},
+{sp:7,t:"Бухучёт и налоги I",l:["НПД, ИП или ООО","УСН 6% против 15%","НДС простыми словами","Зарплата и взносы","Первичка и документы"],p:"Форма бизнеса и налоги для двух твоих идей"},
+{sp:7,t:"Бухучёт и налоги II",l:["Работа с иностранными клиентами","Валютный контроль","Налоговое резидентство","Как работать с бухгалтером","Частые штрафы"],p:"Налоговая карта плана Китай → США"},
+{sp:14,t:"Международный бизнес I",l:["Инкотермс 2020","Логистика: море, авиа, ж/д","Таможня и сертификация","Аккредитив и эскроу","Валютные риски"],p:"Цепочка поставки из Вэньчжоу в США + себестоимость с доставкой"},
+{sp:14,t:"Международный бизнес II",l:["Переговоры в Китае","Поиск поставщиков: 1688, выставки","Контроль качества и инспекции","Компания за рубежом: основы","Санкции и комплаенс"],p:"Чек-лист проверки фабрики + план поездки"},
+{sp:4,t:"Маркетинг",l:["Сегментация","Позиционирование","Ценообразование","Каналы","Бренд и контент"],p:"Маркетинговый план лидогенерации для брокеров"},
+{sp:5,t:"Цифровой маркетинг",l:["Воронка и метрики","Таргет и контекст","SEO и контент","Аналитика и UTM","A/B-тесты"],p:"Медиаплан на 50 000 ₽ с прогнозом ROMI"},
+{sp:11,t:"Стратегия и рынок",l:["TAM / SAM / SOM","Конкурентный анализ","5 сил Портера","Голубой океан","Выбор ниши"],p:"Матрица выбора ниши для бизнеса в США"},
+{sp:12,t:"Инвестиции",l:["Оценка и доли","Типы денег","Term sheet","Питч","Переговоры с инвестором"],p:"Питч-дек на 10 слайдов"},
+{sp:13,t:"Технологии и автоматизация",l:["CRM","No-code","ИИ-агенты","API и интеграции","Данные и дашборды"],p:"Автоматизировать один рабочий процесс"},
+{sp:-1,t:"Итог и ретест",l:["Ретест всех 15 сфер","Разбор ошибок","Повтор слабых тем","План на следующие 3 месяца","Подведение итогов"],p:"Бизнес-план одной идеи: 1 страница + финмодель + питч"}
+];
+
+/* ===== КОНТЕНТ УРОКОВ ===== */
+// c — карточки, terms — [рус, англ], task — {q, a, tol, u, ex}, real — задание в жизни
+const LES={
+"1-1":{c:["<b>Выручка</b> — все деньги от продаж. <b>Прибыль</b> — то, что осталось после всех расходов. <b>Денежный поток</b> — деньги, которые реально пришли и ушли со счёта.","Компания может быть <b>прибыльной по отчёту и при этом банкротом</b>. Причина — <b>кассовый разрыв</b>: деньги нужно платить сейчас, а клиенты заплатят потом.","Пример: пекарня продала сети хлеба на 1 млн ₽ с оплатой через 60 дней. По отчёту прибыль есть. А зарплаты, аренду и муку нужно оплатить в этом месяце — денег нет.","Как защищаться: <b>предоплата</b> от клиентов, <b>отсрочка</b> поставщикам, <b>резерв</b> на 2–3 месяца постоянных расходов, <b>платёжный календарь</b>.","Правило предпринимателя: <b>«Выручка — тщеславие, прибыль — здравомыслие, деньги на счёте — реальность»</b>."],
+terms:[["Выручка","Revenue"],["Прибыль","Profit"],["Денежный поток","Cash flow"],["Кассовый разрыв","Cash gap"],["Предоплата","Prepayment"]],
+task:{q:"Выручка за месяц 800 000 ₽, но клиенты оплатили только 50% (остальное — через 2 месяца). Расходы 600 000 ₽ оплачены полностью. Как изменился остаток на счёте за месяц? (Убыль — со знаком минус.)",a:-200000,tol:0,u:"₽",ex:"Пришло 400 000, ушло 600 000 → −200 000 ₽. Прибыль по отчёту +200 000, а денег на 200 000 меньше. Это и есть кассовый разрыв."},
+real:"Открой банковское приложение и посчитай свой личный денежный поток за прошлый месяц: всего пришло − всего ушло. Запиши цифру."},
+"1-2":{c:["<b>P&L</b> (ОПиУ, отчёт о прибылях и убытках) показывает, заработал ли бизнес за период.","Структура сверху вниз:<br>Выручка<br>− Себестоимость<br>= <b>Валовая прибыль</b><br>− Операционные расходы (аренда, зарплаты, маркетинг)<br>= <b>Операционная прибыль</b><br>− Проценты и налоги<br>= <b>Чистая прибыль</b>","<b>Себестоимость</b> — затраты, которые растут вместе с продажами: мука, упаковка. <b>Операционные расходы</b> есть, даже если ты ничего не продал.","Смотри не только на итог, но и на <b>доли</b>: какой процент выручки съедает каждая строка. Аренда больше 15–20% выручки для общепита — тревожный сигнал.","P&L считается <b>по начислению</b>: продажа учитывается, когда случилась, а не когда пришли деньги. Поэтому P&L и деньги на счёте расходятся."],
+terms:[["Отчёт о прибылях и убытках","P&L / Income statement"],["Себестоимость","COGS"],["Валовая прибыль","Gross profit"],["Операционные расходы","OPEX"],["Чистая прибыль","Net profit"]],
+task:{q:"Кофейня за месяц: выручка 1 200 000, себестоимость 400 000, аренда 200 000, зарплаты 350 000, прочее 50 000, налог УСН 6% от выручки. Чистая прибыль, ₽?",a:128000,tol:0,u:"₽",ex:"1 200 000 − 400 000 − 200 000 − 350 000 − 50 000 − 72 000 (6%) = 128 000 ₽. Рентабельность ≈ 10,7%."},
+real:"Составь P&L своего месяца: доходы (оклад + бонусы) минус расходы по категориям. Сколько остаётся на учёбу в США? Запиши."},
+"1-3":{c:["<b>ДДС</b> (отчёт о движении денежных средств) — это все реальные поступления и платежи. Главный инструмент выживания малого бизнеса.","Деньги движутся в трёх потоках:<br><b>Операционный</b> — клиенты, поставщики, зарплаты<br><b>Инвестиционный</b> — покупка оборудования, ремонт<br><b>Финансовый</b> — кредиты, займы, деньги от инвесторов, дивиденды","Здоровый бизнес зарабатывает деньги в <b>операционном</b> потоке. Если живёшь только за счёт займов в финансовом — это дорога в долги.","<b>Платёжный календарь</b> — ДДС на будущее: по дням видно, когда деньги придут и уйдут. Кассовый разрыв видно заранее, а не в день зарплаты.","Привычка: раз в неделю обновляй платёжный календарь на 4–8 недель вперёд."],
+terms:[["ДДС","Cash flow statement"],["Операционная деятельность","Operating activities"],["Инвестиционная","Investing activities"],["Финансовая","Financing activities"],["Платёжный календарь","Payment calendar"]],
+task:{q:"На начало месяца на счёте 150 000 ₽. Пришло от клиентов 500 000, оплачено поставщикам 300 000, куплена печь за 200 000, получен заём 100 000. Остаток на конец месяца, ₽?",a:250000,tol:0,u:"₽",ex:"150 + 500 − 300 − 200 + 100 = 250 тыс. ₽. Операционный поток +200, инвестиционный −200, финансовый +100."},
+real:"Составь личный платёжный календарь на следующий месяц: даты поступлений (зарплата, бонусы) и платежей. Есть ли дни, когда денег не хватит?"},
+"1-4":{c:["<b>Постоянные расходы</b> не зависят от продаж: аренда, оклады. <b>Переменные</b> растут с каждой продажей: сырьё, упаковка, эквайринг.","<b>Маржинальный доход</b> с единицы = цена − переменные затраты. Именно из него оплачиваются постоянные расходы.","<b>Точка безубыточности</b> = постоянные расходы / маржинальный доход с единицы. Столько нужно продать, чтобы выйти в ноль.","<b>Запас прочности</b> — насколько продажи выше точки безубыточности. Если всего на 5%, любой плохой месяц уводит в минус.","Ты подбираешь помещения. Теперь можешь считать, сколько чеков в день нужно точке, чтобы окупить аренду. Это сильный аргумент в переговорах."],
+terms:[["Постоянные расходы","Fixed costs"],["Переменные расходы","Variable costs"],["Маржинальный доход","Contribution margin"],["Точка безубыточности","Break-even point"],["Запас прочности","Margin of safety"]],
+task:{q:"Пекарня: постоянные расходы 650 000 ₽ в месяц. Средний чек 450 ₽, переменные затраты на чек 180 ₽. Сколько чеков в месяц нужно для безубыточности? (Округли вверх.)",a:2408,tol:1,u:"чеков",ex:"Маржа с чека 450 − 180 = 270 ₽. 650 000 / 270 = 2 407,4 → 2 408 чеков, это около 80 в день."},
+real:"Возьми любое помещение, которое ты подбирал для «Хлебника». Прикинь аренду и посчитай, сколько чеков в день нужно точке, чтобы окупить только аренду."},
+"1-5":{c:["<b>Баланс</b> — снимок на дату: что у компании есть и откуда это взялось.","Главная формула: <b>Активы = Обязательства + Собственный капитал</b>.","<b>Активы</b>: деньги, оборудование, запасы, <b>дебиторка</b> (тебе должны). <b>Обязательства</b>: кредиты, <b>кредиторка</b> (должен ты).","Большая дебиторка — это деньги, «застрявшие» у клиентов. Частая причина кассовых разрывов.","Связка трёх отчётов: <b>P&L</b> — заработал ли ты, <b>ДДС</b> — где деньги, <b>баланс</b> — сколько стоит бизнес. Предприниматель смотрит на все три."],
+terms:[["Баланс","Balance sheet"],["Активы","Assets"],["Обязательства","Liabilities"],["Собственный капитал","Equity"],["Дебиторская задолженность","Accounts receivable"]],
+task:{q:"Активы компании 5 000 000 ₽, обязательства 3 200 000 ₽. Собственный капитал, ₽?",a:1800000,tol:0,u:"₽",ex:"5 000 000 − 3 200 000 = 1 800 000 ₽."},
+real:"Спроси руководителя или знакомого предпринимателя: «Какой у вашего бизнеса самый большой финансовый риск?» Запиши ответ и что ты из него понял."}
+};
+const PROJ={1:{t:"Финмодель пекарни у станции МЦД",steps:["Стартовые вложения: ремонт, оборудование, депозит за аренду, первая закупка","Постоянные расходы в месяц: аренда, зарплаты, коммуналка, прочее","Средний чек и переменные затраты на чек","Точка безубыточности: чеков в месяц и в день","P&L на 12 месяцев: продажи растут от 50% до 100% от плана","Срок окупаемости вложений","3 главных риска и как их снизить"],tip:"Делай в Google Таблицах или на бумаге. Потом скопируй результат мне на разбор."}};
+
+const BOOKS={6:["«Financial Intelligence for Entrepreneurs» — Karen Berman, Joe Knight"],4:["«Позиционирование. Битва за умы» — Эл Райс, Джек Траут"],11:["«Стратегия голубого океана» — Чан Ким, Рене Моборн","«Хорошая стратегия, плохая стратегия» — Ричард Румельт"],12:["«Venture Deals» — Брэд Фелд, Джейсон Мендельсон"],2:["«Спроси маму» (The Mom Test) — Роб Фитцпатрик","«Бизнес с нуля» (The Lean Startup) — Эрик Рис"],3:["«СПИН-продажи» — Нил Рекхэм","«Никаких компромиссов» — Крис Восс"],14:["«Карта культурных различий» (The Culture Map) — Эрин Мейер","«Poorly Made in China» — Пол Мидлер"],10:["«Высокоэффективный менеджмент» — Эндрю Гроув"],7:["nalog.gov.ru — официальные правила и калькуляторы ФНС","klerk.ru — практика бухучёта простым языком"],5:["«Lean Analytics» — Алистер Кролл, Бен Йосковиц"]};
+
+/* ===== СОСТОЯНИЕ ===== */
+const ld=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+const T1=ld('academy1')||{};T1.res=T1.res||{};T1.ans=T1.ans||{};
+let S=ld('academy2')||{xp:0,days:{},done:{},real:{},proj:{},notes:{},ach:[]};
+const save=()=>{try{localStorage.setItem('academy2',JSON.stringify(S));localStorage.setItem('academy1',JSON.stringify(T1))}catch(e){}};
 const $=s=>document.querySelector(s);
-function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(()=>e.style.display='none',2000)}
-const LVN=["Новичок","Практик","Уверенно"];
-const lvl=sc=>sc<=1?0:sc<=3?1:2;
+const dkey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today=()=>dkey(new Date());
+function toast(t){const e=$('#toast');e.innerHTML=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(()=>e.style.display='none',2400)}
+function vpDays(){const v=ld('vp2');return v&&v.days?Object.keys(v.days).filter(k=>v.days[k].done):[]}
+function active(k){return !!S.days[k]||vpDays().includes(k)}
+function streak(){let n=0,d=new Date();if(!active(dkey(d)))d.setDate(d.getDate()-1);while(active(dkey(d))){n++;d.setDate(d.getDate()-1)}return n}
+function totalXP(){return S.xp+vpDays().length*XP.vp}
+function rank(x){let r=0;RANKS.forEach((k,i)=>{if(x>=k[1])r=i});return r}
+function stats(){return{lessons:Object.keys(S.done).length,streak:streak(),real:Object.keys(S.real).length,projects:Object.keys(S.proj).length,vp:vpDays().length,xp:totalXP(),mastered:Object.values(T1.res).filter(v=>v>=5).length}}
+function addXP(n,why){const before=rank(totalXP());S.xp+=n;S.days[today()]=1;save();toast('+'+n+' XP · '+why);
+const after=rank(totalXP());if(after>before)setTimeout(()=>toast('👑 Новый ранг: '+RANKS[after][0]),2600);checkAch()}
+function checkAch(){const s=stats();ACH.forEach(a=>{if(!S.ach.includes(a[0])&&a[3](s)){S.ach.push(a[0]);save();setTimeout(()=>toast(a[1]+' Достижение: '+a[2]),5200)}})}
+function weekIdx(){const d=(new Date(today())-new Date(START))/864e5;return Math.max(0,Math.min(11,Math.floor(d/7)))}
+function dayIdx(){const g=new Date().getDay();return g===0?6:g-1} // 0=пн
+const LVN=["Новичок","Практик","Уверенно"],lvl=sc=>sc<=1?0:sc<=3?1:2;
 
-function home(){const done=Object.keys(S.res).length;
-let h=`<h1>Бизнес-академия</h1><p class="mut">15 сфер предпринимателя. Пройди тест уровня в каждой — получишь карту сильных и слабых сторон. Тренажёры по сферам будут добавляться.</p>
-<div class="card"><h3>Карта уровня · ${done}/15</h3><div class="map">${SP.map((s,i)=>{const r=S.res[i];return `<div class="${r!=null?'l'+lvl(r):''}">${i+1}</div>`}).join('')}</div>
-<p class="mut" style="margin-top:8px">🟥 новичок · 🟧 практик · 🟩 уверенно · серый — не пройдено</p>
-${done<15?`<button class="btn w" id="all">${done?'Продолжить тестирование':'Пройти все тесты подряд (~20 мин)'}</button>`:`<button class="btn w" id="rep">Скопировать результаты для Claude</button>`}</div>`;
-BLOCKS.forEach((b,bi)=>{h+=`<div class="blk">${bi+1}. ${b}</div>`;
-SP.forEach((s,i)=>{if(s.b!==bi)return;const r=S.res[i];
-h+=`<div class="card sph" data-i="${i}"><div class="num">${i+1}</div><div class="t"><b>${s.n}</b>${s.link?'<div class="mut">есть полный тренажёр</div>':''}</div><div class="lv ${r!=null?'l'+lvl(r):''}">${r!=null?LVN[lvl(r)]+' · '+r+'/5':'тест'}</div></div>`})});
-$('#app').innerHTML=h;window.scrollTo(0,0);
-document.querySelectorAll('.sph').forEach(c=>c.onclick=()=>sphere(+c.dataset.i));
-const a=$('#all');if(a)a.onclick=()=>{const n=SP.findIndex((_,i)=>S.res[i]==null);test(n,true)};
-const rp=$('#rep');if(rp)rp.onclick=copyRes}
+/* ===== НАВИГАЦИЯ ===== */
+let TAB='today';
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>show(b.dataset.t));
+function show(t){TAB=t;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));$('#tabs').style.display='flex';
+({today:viewToday,plan:viewPlan,spheres:viewSpheres,me:viewMe})[t]();window.scrollTo(0,0)}
+function sub(){$('#tabs').style.display='none';window.scrollTo(0,0)}
+function openVP(){$('#ovf').src='vp.html';$('#ov').classList.add('on')}
+$('#ovx').onclick=()=>{$('#ov').classList.remove('on');$('#ovf').src='about:blank';checkAch();show(TAB)};
 
-function sphere(i){const s=SP[i],r=S.res[i];
-$('#app').innerHTML=`<button class="back" id="bk">‹ Все сферы</button><h1>${i+1}. ${s.n}</h1><p class="mut">Блок: ${BLOCKS[s.b]}</p>
-<div class="card"><h3>Уровень</h3>${r!=null?`<p><b>${LVN[lvl(r)]}</b> — ${r} из 5</p>`:'<p class="mut">Тест не пройден</p>'}<button class="btn" id="tt">${r!=null?'Пройти заново':'Тест уровня (5 вопросов)'}</button>${s.link?`<a class="btn alt" href="${s.link}">Открыть тренажёр</a>`:''}</div>
-<div class="card"><h3>Суть сферы</h3><ul class="core">${s.core.map(c=>`<li>${c}</li>`).join('')}</ul></div>
-<div class="card"><h3>Практика</h3><p class="mut">Ответь письменно и отправь Claude на разбор.</p>${s.t.map((t,k)=>`<p><b>Задание ${k+1}.</b> ${t}</p><textarea data-k="${k}" placeholder="Твой ответ…">${(S.ans[i+'_'+k]||'').replace(/</g,'&lt;')}</textarea>`).join('')}
-<button class="btn w" id="cp">Скопировать ответы на разбор</button></div>`;window.scrollTo(0,0);
-$('#bk').onclick=home;$('#tt').onclick=()=>test(i,false);
-document.querySelectorAll('textarea').forEach(t=>t.oninput=()=>{S.ans[i+'_'+t.dataset.k]=t.value;save()});
-$('#cp').onclick=()=>copy(`Разбери мои ответы как наставник-предприниматель. Сфера: ${s.n}. Оцени каждый ответ 0–10, укажи ошибки и дай сильную версию.\n\n`+s.t.map((t,k)=>`Задание ${k+1}: ${t}\nМой ответ: ${S.ans[i+'_'+k]||'(пусто)'}`).join('\n\n'))}
+/* ===== СЕГОДНЯ ===== */
+function viewToday(){const x=totalXP(),r=rank(x),nx=RANKS[r+1],w=weekIdx(),di=dayIdx(),W=PLAN[w],wk=di>=5;
+const vpDone=vpDays().includes(today());const lk=(w+1)+'-'+(di+1);const lDone=!!S.done[lk];const pDone=!!S.proj[w+1];
+const h=new Date().getHours(),hi=h<12?'Доброе утро':h<18?'Добрый день':'Добрый вечер';
+$('#app').innerHTML=`<div class="eyebrow">Неделя ${w+1} из 12 · ${W.t}</div><h1>${hi}, Даниил</h1>
+<div class="card hl"><div class="row"><div class="grow"><div class="mut">Ранг</div><h2 style="margin:0">${RANKS[r][0]}</h2></div><div style="text-align:right"><div class="mut">Опыт</div><b class="gold serif" style="font-size:22px">${x} XP</b></div></div>
+<div class="bar"><i style="width:${nx?Math.min(100,(x-RANKS[r][1])/(nx[1]-RANKS[r][1])*100):100}%"></i></div><div class="mut">${nx?'До ранга «'+nx[0]+'» — '+(nx[1]-x)+' XP':'Максимальный ранг'}</div></div>
+<div class="stats"><div class="stat"><b>${streak()}</b><span>дней подряд</span></div><div class="stat"><b>${Object.keys(S.done).length}</b><span>уроков</span></div><div class="stat"><b>${Object.keys(S.real).length}</b><span>дел в жизни</span></div></div>
+<div class="card"><h3>План на сегодня</h3>
+<div class="item" id="iVP"><div class="ic ${vpDone?'done':''}">${vpDone?'✓':'💡'}</div><div class="grow"><b>ЦП-тренировка</b><div class="mut">Утро · ~25 мин · +${XP.vp} XP</div></div><span class="chev">›</span></div>
+${wk?`<div class="item" id="iP"><div class="ic ${pDone?'done':''}">${pDone?'✓':'📐'}</div><div class="grow"><b>Проект недели</b><div class="mut">${W.p} · ~2 ч · +${XP.project} XP</div></div><span class="chev">›</span></div>`
+:`<div class="item" id="iL"><div class="ic ${lDone?'done':''}">${lDone?'✓':'🎓'}</div><div class="grow"><b>Урок ${di+1}: ${W.l[di]}</b><div class="mut">Вечер, перед сном · ~30 мин · до +${XP.lesson+XP.taskOk+XP.real} XP</div></div><span class="chev">›</span></div>`}
+</div>
+${new Date(today())<new Date(START)?`<div class="card"><h3>Старт плана — понедельник, 23 ноября</h3><p class="mut">Сегодня можно открыть первый урок заранее или сделать ЦП-тренировку.</p></div>`:''}`;
+$('#iVP').onclick=openVP;if(wk)$('#iP').onclick=()=>viewProject(w+1);else $('#iL').onclick=()=>viewLesson(w+1,di+1)}
 
-function test(i,chain){const s=SP[i];let k=0,ok=0,lock=0;
-const draw=()=>{const q=s.q[k];
-$('#app').innerHTML=`<button class="back" id="bk">‹ Выйти</button><h2>${i+1}. ${s.n}</h2><div class="steps">${s.q.map((_,j)=>`<i class="${j<=k?'on':''}"></i>`).join('')}</div>
-<div class="card"><h3>${q[0]}</h3>${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')}<div id="ex"></div></div>`;
-$('#bk').onclick=home;
-document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(lock)return;lock=1;const good=+b.dataset.j===q[2];if(good)ok++;
-document.querySelectorAll('.opt').forEach(x=>{if(+x.dataset.j===q[2])x.classList.add('good');else if(x===b)x.classList.add('badc')});
-$('#ex').innerHTML=`<p class="mut">${good?'✅':'❌'} ${q[3]}</p><button class="btn w" id="nx">${k<4?'Дальше':'Результат'}</button>`;
-$('#nx').onclick=()=>{lock=0;k++;if(k<5)draw();else fin()}})};
-const fin=()=>{S.res[i]=ok;save();const nxt=chain?SP.findIndex((_,j)=>S.res[j]==null):-1;
-$('#app').innerHTML=`<div class="card"><h2>${s.n}: ${ok}/5</h2><p>Уровень: <b>${LVN[lvl(ok)]}</b></p><p class="mut">${ok<=1?'Начни с карточки «Суть сферы».':ok<=3?'База есть — закрепи практикой.':'Сильно. Переходи к практическим заданиям.'}</p>
-${nxt>=0?`<button class="btn w" id="nn">Следующая сфера: ${SP[nxt].n}</button>`:''}<button class="btn alt w" id="hh">К карте</button></div>`;
-if(nxt>=0)$('#nn').onclick=()=>test(nxt,true);$('#hh').onclick=home};
+/* ===== УРОК ===== */
+function viewLesson(w,d){sub();const k=w+'-'+d,L=LES[k],title=PLAN[w-1].l[d-1];
+if(!L){$('#app').innerHTML=`<button class="back" id="bk">‹ Назад</button><div class="eyebrow">Неделя ${w} · урок ${d}</div><h1>${title}</h1>
+<div class="card"><p>Контент этой недели ещё готовится. Напиши Claude: <b class="gold">«Сделай неделю ${w} в академии»</b> — и уроки появятся здесь.</p>
+<p class="mut">А пока: прочитай про тему «${title}» из книги ниже или найди 10-минутное видео, затем запиши 3 главные мысли.</p>${(BOOKS[PLAN[w-1].sp]||[]).map(b=>`<p>📚 ${b}</p>`).join('')}
+<textarea id="nt" placeholder="3 главные мысли…">${S.notes[k]||''}</textarea><button class="btn" id="sv">Сохранить и засчитать урок</button></div>`;
+$('#bk').onclick=()=>show(TAB);$('#sv').onclick=()=>{S.notes[k]=$('#nt').value;if(!S.done[k]&&$('#nt').value.trim().length>20){S.done[k]=1;addXP(XP.lesson,'урок')}else save();show(TAB)};return}
+const steps=L.c.length+3;let i=0;
+const draw=()=>{const dots=`<div class="dots">${Array.from({length:steps},(_,j)=>`<i class="${j<=i?'on':''}"></i>`).join('')}</div>`;
+let body='';
+if(i<L.c.length)body=`<div class="lesson-card"><div class="eyebrow">Неделя ${w} · урок ${d}</div><h2>${title}</h2><div class="body">${L.c[i]}</div><button class="btn" id="nx">Дальше</button></div>`;
+else if(i===L.c.length)body=`<div class="eyebrow">Словарь для WKU</div><h2>Термины по-английски</h2><div class="card">${L.terms.map(t=>`<div class="term"><span>${t[0]}</span><em>${t[1]}</em></div>`).join('')}</div><button class="btn" id="nx">К задаче</button>`;
+else if(i===L.c.length+1)body=`<div class="eyebrow">Задача</div><h2>Посчитай</h2><div class="card"><p>${L.task.q}</p><input type="number" inputmode="decimal" id="ta" placeholder="Ответ, ${L.task.u}"><div id="tr"></div></div><button class="btn" id="ck">Проверить</button>`;
+else body=`<div class="eyebrow">Дело в реальной жизни</div><h2>Примени сегодня</h2><div class="card"><p>${L.real}</p><textarea id="rn" placeholder="Что сделал и что понял…">${S.notes[k]||''}</textarea></div><button class="btn" id="fin">Завершить урок</button><button class="btn alt" id="cp">Скопировать на разбор Claude</button>`;
+$('#app').innerHTML=`<button class="back" id="bk">‹ Выйти</button>${dots}${body}`;
+$('#bk').onclick=()=>show(TAB);
+const nx=$('#nx');if(nx)nx.onclick=()=>{i++;draw()};
+const ck=$('#ck');if(ck)ck.onclick=()=>{const v=parseFloat(String($('#ta').value).replace(',','.'));if(isNaN(v))return;const ok=Math.abs(v-L.task.a)<=L.task.tol;
+$('#tr').innerHTML=`<p style="color:var(--${ok?'ok':'bad'})">${ok?'✅ Верно':'❌ Правильный ответ: '+L.task.a.toLocaleString('ru-RU')+' '+L.task.u}</p><p class="mut">${L.task.ex}</p>`;
+S['t'+k]=ok;ck.textContent='Дальше';ck.onclick=()=>{i++;draw()}};
+const fin=$('#fin');if(fin)fin.onclick=()=>{const note=$('#rn').value.trim();S.notes[k]=note;let g=0;
+if(!S.done[k]){S.done[k]=1;g+=XP.lesson+(S['t'+k]?XP.taskOk:XP.taskTry)}
+if(note.length>15&&!S.real[k]){S.real[k]=1;g+=XP.real}
+if(g)addXP(g,'урок «'+title+'»');else save();show(TAB)};
+const cp=$('#cp');if(cp)cp.onclick=()=>copy(`Разбери как наставник-предприниматель. Урок «${title}» (неделя ${w}).\nЗадание в жизни: ${L.real}\nМой результат: ${$('#rn').value||'(пусто)'}\nОцени, что я упустил, и дай следующий шаг.`)};
 draw()}
 
-function copyRes(){copy('Результаты моего теста по 15 сферам предпринимателя. Составь план обучения на 3 месяца с приоритетами, начиная со слабых и самых нужных сфер.\n\n'+SP.map((s,i)=>`${i+1}. ${s.n}: ${S.res[i]!=null?S.res[i]+'/5 ('+LVN[lvl(S.res[i])]+')':'не пройден'}`).join('\n'))}
+/* ===== ПРОЕКТ ===== */
+function viewProject(w){sub();const P=PROJ[w],title=PLAN[w-1].p;const k='p'+w;
+$('#app').innerHTML=`<button class="back" id="bk">‹ Назад</button><div class="eyebrow">Проект недели ${w} · ~2 часа · +${XP.project} XP</div><h1>${title}</h1>
+${P?`<div class="card"><h3>Шаги</h3><ol>${P.steps.map(s=>`<li style="margin:8px 0">${s}</li>`).join('')}</ol><p class="mut">${P.tip}</p></div>`:`<div class="card"><p>Детали проекта появятся вместе с уроками недели. Напиши Claude: <b class="gold">«Сделай неделю ${w} в академии»</b>.</p></div>`}
+<div class="card"><h3>Результат</h3><textarea id="pr" placeholder="Вставь сюда результат или ссылку на таблицу…" style="min-height:160px">${S.notes[k]||''}</textarea></div>
+<button class="btn" id="fin">${S.proj[w]?'Сохранить':'Сдать проект'}</button><button class="btn alt" id="cp">Скопировать на разбор Claude</button>`;
+$('#bk').onclick=()=>show(TAB);
+$('#fin').onclick=()=>{const v=$('#pr').value.trim();S.notes[k]=v;if(!S.proj[w]&&v.length>40){S.proj[w]=1;addXP(XP.project,'проект недели')}else save();show(TAB)};
+$('#cp').onclick=()=>copy(`Разбери мой проект недели как ментор-предприниматель и инвестор. Проект: «${title}».\n${P?'Шаги: '+P.steps.join('; ')+'\n':''}\nМой результат:\n${$('#pr').value||'(пусто)'}\n\nОцени 0–10, найди ошибки в цифрах и логике, дай конкретные улучшения.`)}
+
+/* ===== ПЛАН ===== */
+function viewPlan(){const cw=weekIdx();
+$('#app').innerHTML=`<div class="eyebrow">3 месяца · 23 ноября — 14 февраля</div><h1>План обучения</h1>
+<p class="mut">Порядок — по результатам теста: сначала слабые и самые нужные для Китая и США сферы. ЦП-тренировка — каждое утро.</p>
+<div class="card">${PLAN.map((W,i)=>{const n=W.l.filter((_,d)=>S.done[(i+1)+'-'+(d+1)]).length;return `<div class="week ${i===cw?'cur':''}"><div class="row"><div class="grow"><div class="mut">Неделя ${i+1}${i===cw?' · сейчас':''}</div><b>${W.t}</b></div><span class="pill ${n===5?'ok':n?'g':''}">${n}/5</span></div>
+<details ${i===cw?'open':''}><summary class="mut" style="margin-top:6px">Уроки и проект</summary>${W.l.map((l,d)=>`<div class="item" data-w="${i+1}" data-d="${d+1}"><div class="ic ${S.done[(i+1)+'-'+(d+1)]?'done':''}">${S.done[(i+1)+'-'+(d+1)]?'✓':(LES[(i+1)+'-'+(d+1)]?'🎓':'·')}</div><div class="grow">${l}</div><span class="chev">›</span></div>`).join('')}
+<div class="item" data-p="${i+1}"><div class="ic ${S.proj[i+1]?'done':''}">${S.proj[i+1]?'✓':'📐'}</div><div class="grow"><b>Проект:</b> ${W.p}</div><span class="chev">›</span></div></details></div>`}).join('')}</div>`;
+document.querySelectorAll('.item[data-w]').forEach(e=>e.onclick=()=>viewLesson(+e.dataset.w,+e.dataset.d));
+document.querySelectorAll('.item[data-p]').forEach(e=>e.onclick=()=>viewProject(+e.dataset.p))}
+
+/* ===== СФЕРЫ ===== */
+function viewSpheres(){const done=Object.keys(T1.res).length;
+let h=`<div class="eyebrow">15 сфер предпринимателя</div><h1>Карта навыков</h1>
+<div class="card"><div class="map">${SP.map((s,i)=>{const r=T1.res[i];return `<div class="${r!=null?'l'+lvl(r):''}">${i+1}</div>`}).join('')}</div>
+<p class="mut" style="margin-top:10px">Красный — новичок · жёлтый — практик · зелёный — уверенно · 5/5 — мастер сферы 🏅</p>
+<button class="btn alt" id="rep">Скопировать результаты для Claude</button></div>`;
+const BL=["Создать то, что купят","Продать","Управлять","Расти"];
+BL.forEach((b,bi)=>{h+=`<div class="eyebrow" style="margin-top:18px">${b}</div><div class="card">`;SP.forEach((s,i)=>{if(s.b!==bi)return;const r=T1.res[i];
+h+=`<div class="item" data-i="${i}"><div class="ic ${r>=5?'done':''}">${r>=5?'🏅':i+1}</div><div class="grow"><b>${s.n}</b><div class="mut">${r!=null?LVN[lvl(r)]+' · '+r+'/5':'Тест не пройден'}</div></div><span class="chev">›</span></div>`});h+='</div>'});
+$('#app').innerHTML=h;
+document.querySelectorAll('.item[data-i]').forEach(e=>e.onclick=()=>viewSphere(+e.dataset.i));
+$('#rep').onclick=()=>copy('Результаты теста по 15 сферам:\n'+SP.map((s,i)=>`${i+1}. ${s.n}: ${T1.res[i]!=null?T1.res[i]+'/5':'—'}`).join('\n'))}
+function viewSphere(i){sub();const s=SP[i],r=T1.res[i];
+$('#app').innerHTML=`<button class="back" id="bk">‹ Сферы</button><div class="eyebrow">Сфера ${i+1}</div><h1>${s.n}</h1>
+<div class="card hl"><div class="row"><div class="grow"><div class="mut">Уровень</div><h2 style="margin:0">${r!=null?LVN[lvl(r)]+' · '+r+'/5':'—'}</h2></div>${r>=5?'<span style="font-size:32px">🏅</span>':''}</div>
+<button class="btn" id="tt">${r!=null?'Пройти тест заново':'Тест уровня'}</button>${s.link?'<button class="btn alt" id="vp">Открыть ЦП-тренажёр</button>':''}</div>
+<div class="card"><h3>Суть сферы</h3><ul class="core">${s.core.map(c=>`<li>${c}</li>`).join('')}</ul></div>
+${BOOKS[i]?`<div class="card"><h3>Что почитать</h3>${BOOKS[i].map(b=>`<p>📚 ${b}</p>`).join('')}</div>`:''}
+<div class="card"><h3>Практика</h3>${s.t.map((t,k)=>`<p><b>Задание ${k+1}.</b> ${t}</p><textarea data-k="${k}" placeholder="Твой ответ…">${T1.ans[i+'_'+k]||''}</textarea>`).join('')}
+<button class="btn alt" id="cp">Скопировать на разбор Claude</button></div>`;
+$('#bk').onclick=()=>show('spheres');$('#tt').onclick=()=>sphereTest(i);if(s.link)$('#vp').onclick=openVP;
+document.querySelectorAll('textarea[data-k]').forEach(t=>t.oninput=()=>{T1.ans[i+'_'+t.dataset.k]=t.value;save()});
+$('#cp').onclick=()=>copy(`Разбери мои ответы. Сфера: ${s.n}. Оцени 0–10, укажи ошибки и дай сильную версию.\n\n`+s.t.map((t,k)=>`Задание ${k+1}: ${t}\nОтвет: ${T1.ans[i+'_'+k]||'(пусто)'}`).join('\n\n'))}
+function sphereTest(i){const s=SP[i];let k=0,ok=0,lock=0;
+const draw=()=>{const q=s.q[k];$('#app').innerHTML=`<button class="back" id="bk">‹ Выйти</button><div class="dots">${s.q.map((_,j)=>`<i class="${j<=k?'on':''}"></i>`).join('')}</div><div class="eyebrow">${s.n}</div><h2>${q[0]}</h2>${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')}<div id="ex"></div>`;
+$('#bk').onclick=()=>viewSphere(i);
+document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(lock)return;lock=1;const g=+b.dataset.j===q[2];if(g)ok++;
+document.querySelectorAll('.opt').forEach(x=>{if(+x.dataset.j===q[2])x.classList.add('good');else if(x===b)x.classList.add('badc')});
+$('#ex').innerHTML=`<p class="mut">${g?'✅':'❌'} ${q[3]}</p><button class="btn" id="nx">${k<4?'Дальше':'Результат'}</button>`;
+$('#nx').onclick=()=>{lock=0;k++;if(k<5)draw();else{const prev=T1.res[i];T1.res[i]=ok;save();if(ok>(prev||0))addXP((ok-(prev||0))*5,'тест сферы');viewSphere(i)}}})};draw()}
+
+/* ===== ПРОФИЛЬ ===== */
+function viewMe(){const s=stats(),r=rank(s.xp);
+$('#app').innerHTML=`<div class="eyebrow">Профиль</div><h1>${RANKS[r][0]}</h1><p class="mut">${s.xp} XP · ${s.streak} дней подряд</p>
+<div class="card"><h3>Путь ранга</h3>${RANKS.map((k,i)=>`<div class="item"><div class="ic ${i<=r?'done':''}">${i<=r?'👑':i+1}</div><div class="grow"><b style="${i===r?'color:var(--gold)':''}">${k[0]}</b><div class="mut">от ${k[1]} XP</div></div></div>`).join('')}</div>
+<div class="card"><h3>Достижения · ${S.ach.length}/${ACH.length}</h3><div class="ach">${ACH.map(a=>`<div class="${S.ach.includes(a[0])?'on':''}"><b>${a[1]}</b>${a[2]}</div>`).join('')}</div></div>
+<div class="card"><h3>Как начисляется опыт</h3><p class="mut">Урок +${XP.lesson} · верная задача +${XP.taskOk} · дело в жизни +${XP.real} · проект недели +${XP.project} · ЦП-тренировка +${XP.vp} · тест сферы +5 за каждый новый верный ответ</p></div>
+<div class="card"><h3>Еженедельный разбор</h3><p class="mut">В воскресенье скопируй отчёт и отправь Claude — получишь разбор недели и корректировку плана.</p><button class="btn" id="rp">Скопировать отчёт недели</button></div>`;
+$('#rp').onclick=()=>{const w=weekIdx(),W=PLAN[w];copy(`Отчёт недели ${w+1} в Бизнес-академии («${W.t}»).\nРанг: ${RANKS[r][0]}, ${s.xp} XP, серия ${s.streak} дн.\nУроки: ${W.l.map((l,d)=>(S.done[(w+1)+'-'+(d+1)]?'✓ ':'✗ ')+l).join('; ')}\nПроект: ${S.proj[w+1]?'сдан':'не сдан'}\nЗаметки:\n${W.l.map((l,d)=>S.notes[(w+1)+'-'+(d+1)]?'- '+l+': '+S.notes[(w+1)+'-'+(d+1)]:'').filter(Boolean).join('\n')}\n\nРазбери неделю, укажи пробелы и скорректируй план.`)}}
+
 async function copy(t){try{await navigator.clipboard.writeText(t);toast('Скопировано — вставь в чат с Claude')}catch(e){toast('Не удалось скопировать')}}
-home();
+checkAch();show('today');
 </script>
 </body>
 </html>
