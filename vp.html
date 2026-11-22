@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Тренажёр ценностных предложений</title>
+<title>ЦП тренажёр</title>
 <meta name="apple-mobile-web-app-title" content="ЦП тренажёр">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" href="vp-icon.png">
@@ -13,234 +13,343 @@
 @media (prefers-color-scheme:dark){:root{--bg:#161513;--card:#22201d;--ink:#eeeae2;--mut:#a29d93;--line:#38352f;--acc:#fb923c;--acc2:#2dd4bf;--ok:#4ade80;--bad:#f87171}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,system-ui,Segoe UI,Roboto,sans-serif}
-header{padding:20px 16px 8px;max-width:720px;margin:auto}
-h1{font-size:22px;margin:0 0 4px}
-.sub{color:var(--mut);font-size:14px;margin:0}
-nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;padding:8px 12px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;padding:10px 12px}
 nav button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;margin-right:6px;font-size:14px}
 nav button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-main{max-width:720px;margin:auto;padding:12px 16px 60px}
+main{max-width:720px;margin:auto;padding:8px 16px 80px}
 section{display:none}section.on{display:block}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
-h2{font-size:19px;margin:8px 0}
-h3{font-size:16px;margin:0 0 6px}
-.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:6px;background:color-mix(in srgb,var(--acc) 15%,transparent);color:var(--acc);margin-bottom:6px}
+h1{font-size:22px;margin:10px 0 2px}h2{font-size:19px;margin:6px 0}h3{font-size:16px;margin:0 0 6px}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:6px;background:color-mix(in srgb,var(--acc) 15%,transparent);color:var(--acc);margin:0 4px 6px 0}
+.tag.g{background:color-mix(in srgb,var(--acc2) 15%,transparent);color:var(--acc2)}
 .mut{color:var(--mut);font-size:14px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.box{border:1px dashed var(--line);border-radius:10px;padding:10px;font-size:14px}
-.box b{display:block;margin-bottom:2px}
-label{display:block;font-weight:600;font-size:14px;margin:14px 0 4px}
-textarea,select,input{width:100%;font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
-textarea{min-height:64px;resize:vertical}
-.btn{display:inline-block;border:0;background:var(--acc);color:#fff;font-weight:600;border-radius:10px;padding:11px 16px;margin:10px 8px 0 0;font-size:15px}
+.btn{display:inline-block;border:0;background:var(--acc);color:#fff;font-weight:600;border-radius:12px;padding:13px 18px;margin:10px 8px 0 0;font-size:16px}
 .btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
-.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
-.chk input{width:22px;height:22px;flex:none;margin-top:1px}
-.score{font-size:28px;font-weight:700}
+.btn.w{width:100%}
 .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:12px;margin:8px 0;font-size:15px}
 .opt.good{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
 .opt.badc{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent)}
-.expl{display:none;font-size:14px;margin-top:6px}
+textarea,select{width:100%;font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+textarea{min-height:110px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--mut)}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--acc)}
+.timer{font-size:40px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
+.timer.low{color:var(--bad)}
+.task{font-size:18px;font-weight:600;line-height:1.4}
+.rub{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.rub .seg{display:flex;flex:none}.rub .seg button{border:1px solid var(--line);background:var(--bg);color:var(--ink);width:38px;height:34px;font-size:15px}
+.rub .seg button:first-child{border-radius:8px 0 0 8px}.rub .seg button:last-child{border-radius:0 8px 8px 0}
+.rub .seg button.on{background:var(--ink);color:var(--bg)}
 .formula{font-size:15px;background:var(--bg);border-left:3px solid var(--acc2);padding:10px 12px;border-radius:6px}
-#out{white-space:pre-wrap;font-size:14px}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;display:none}
+.expl{font-size:14px;margin-top:6px}
+.steps{display:flex;gap:4px;margin:6px 0 2px}.steps i{flex:1;height:5px;border-radius:5px;background:var(--line)}.steps i.on{background:var(--acc)}
+.filters button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 10px;margin:0 4px 6px 0;font-size:13px}
+.filters button.on{background:var(--acc2);color:#fff;border-color:var(--acc2)}
+pre{white-space:pre-wrap;font:13px/1.45 ui-monospace,Menlo,monospace;background:var(--bg);padding:10px;border-radius:8px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;display:none;z-index:9}
 </style>
 </head>
 <body>
-<header>
-<h1>Тренажёр ценностных предложений</h1>
-<p class="sub">По книге Остервальдера «Разработка ценностных предложений» плюс приёмы для прорывных идей</p>
-</header>
 <nav id="nav">
-<button data-s="base" class="on">Основа</button>
-<button data-s="tricks">10 приёмов</button>
+<button data-s="home" class="on">Сегодня</button>
+<button data-s="work">Тренировка</button>
+<button data-s="free">Свободный спринт</button>
 <button data-s="cases">Разборы</button>
-<button data-s="quiz">Сильное или слабое</button>
-<button data-s="lab">Тренажёр</button>
+<button data-s="theory">Теория</button>
+<button data-s="prog">Прогресс</button>
 </nav>
 <main>
 
-<section id="base" class="on">
-<div class="card">
-<h2>Канва за 1 минуту</h2>
-<p class="mut">Слева — то, что ты даёшь клиенту. Справа — сам клиент. Предложение работает, когда левая часть точно попадает в правую.</p>
-<div class="grid2">
-<div class="box"><b>🧩 Работы клиента</b>Что он пытается сделать: функционально, социально, эмоционально</div>
-<div class="box"><b>📦 Продукты и услуги</b>Что именно ты предлагаешь</div>
-<div class="box"><b>😣 Боли</b>Что мешает, раздражает, пугает, стоит денег и времени</div>
-<div class="box"><b>💊 Обезболивающие</b>Как ты убираешь конкретные боли</div>
-<div class="box"><b>🎁 Выгоды</b>Какой результат он хочет, о чём мечтает</div>
-<div class="box"><b>🚀 Создатели выгод</b>Как ты даёшь этот результат</div>
+<section id="home" class="on">
+<h1>ЦП тренажёр</h1>
+<p class="mut">30 дней — и придумать или оценить ценностное предложение для тебя станет делом минуты.</p>
+<div class="stats">
+<div class="stat"><b id="sStreak">0</b><span>дней подряд</span></div>
+<div class="stat"><b id="sLvl">—</b><span>уровень</span></div>
+<div class="stat"><b id="sAvg">—</b><span>ср. балл</span></div>
+<div class="stat"><b id="sBest">—</b><span>рекорд, сек</span></div>
 </div>
-</div>
-<div class="card">
-<h3>Почему в книге мало конкретики</h3>
-<p>Канва — это проверка, а не генератор идей. Она показывает, совпало предложение с клиентом или нет, но не говорит, <b>что придумать</b>. Прорывные идеи появляются из <b>приёмов</b>: они ломают привычную модель отрасли. Приёмы — на следующей вкладке.</p>
-</div>
-<div class="card">
-<h3>Формула сильного предложения</h3>
-<div class="formula">Для <b>[кого]</b>, которые хотят <b>[работа]</b>, но страдают от <b>[главная боль]</b>, наш <b>[продукт]</b> — это <b>[категория]</b>, который <b>[измеримый результат]</b>. В отличие от <b>[текущая альтернатива]</b>, мы <b>[то, что не могут или не хотят повторить другие]</b>.</div>
-<p class="mut">Тест: если в формулу можно подставить конкурента и она останется правдой, значит, предложения нет.</p>
-</div>
+<div class="card" id="homeCard"></div>
 </section>
 
-<section id="tricks">
-<p class="mut">Возьми обычную услугу и прогони через каждый приём. Хоть один обычно даёт идею, которая не похожа на рынок.</p>
-<div id="trickList"></div>
+<section id="work"><div id="wk"></div></section>
+
+<section id="free">
+<div class="card"><h2>Свободный спринт</h2><p class="mut">Случайная задача в любой момент: в МЦД, в очереди, перед встречей. Время зависит от уровня.</p>
+<button class="btn w" id="freeGo">Дай задачу</button></div>
+<div id="freeBox"></div>
 </section>
 
 <section id="cases">
-<p class="mut">Как известные компании сломали привычную модель. Смотри, какой приём сработал.</p>
+<p class="mut">Как известные компании сломали привычную модель. Сначала угадай приём, потом открой разбор.</p>
+<div class="filters" id="cf"></div>
 <div id="caseList"></div>
 </section>
 
-<section id="quiz">
-<div class="card"><div class="mut">Выбери более сильное предложение. Счёт: <b id="qs">0</b> / <span id="qt">0</span></div></div>
-<div id="quizList"></div>
-</section>
+<section id="theory"><div id="th"></div></section>
 
-<section id="lab">
-<div class="card">
-<h2>Собери своё предложение</h2>
-<label>Кейс</label>
-<select id="caseSel"></select>
-<p class="mut" id="caseHint"></p>
-<label>1. Кто клиент? Конкретно: кто, сколько, в какой ситуации</label>
-<textarea id="f_who"></textarea>
-<label>2. Какую работу он пытается сделать?</label>
-<textarea id="f_job"></textarea>
-<label>3. Три главные боли (самая сильная — первая)</label>
-<textarea id="f_pain"></textarea>
-<label>4. Три выгоды, о которых он мечтает</label>
-<textarea id="f_gain"></textarea>
-<label>5. Чем он пользуется сейчас (альтернатива)?</label>
-<textarea id="f_alt"></textarea>
-<label>6. Какой приём применяешь?</label>
-<select id="f_trick"></select>
-<label>7. Твоё предложение по формуле</label>
-<textarea id="f_vp" style="min-height:110px"></textarea>
-<label>8. Как проверишь за неделю, не создавая продукт?</label>
-<textarea id="f_test"></textarea>
-</div>
-<div class="card">
-<h3>Самопроверка</h3>
-<div id="checks"></div>
-<p>Итог: <span class="score" id="sc">0</span><span class="mut"> / 10</span> — <span id="scTxt" class="mut"></span></p>
-</div>
-<div class="card">
-<h3>Отправить на разбор</h3>
-<p class="mut">Нажми «Скопировать», вставь в чат с Claude. Получишь разбор, как от наставника.</p>
-<button class="btn" id="copy">Скопировать для разбора</button>
-<button class="btn alt" id="clear">Очистить</button>
-<div id="out" class="mut" style="margin-top:10px"></div>
-</div>
+<section id="prog">
+<div class="card"><h3>Средний балл спринтов по дням</h3><div id="chart"></div></div>
+<div class="card"><h3>Уровни</h3><div id="lvls"></div></div>
+<div class="card"><h3>История</h3><div id="hist" class="mut"></div>
+<button class="btn alt" id="reset">Сбросить прогресс</button></div>
 </section>
 </main>
 <div class="toast" id="toast"></div>
 
 <script>
+/* ===== DATA ===== */
 const TRICKS=[
-["Убери главную боль целиком","Не уменьшай боль, а сделай так, чтобы её не было совсем.","Тинькофф: не нужно идти в отделение — карту привозит курьер."],
-["Поменяй, кто платит","Пусть платит не тот, кто привык. Часто клиент — не тот, кто пользуется.","Риелторы: комиссию платит арендодатель, а не арендатор."],
-["Плата за результат","Берёшь деньги только при результате. Риск переходит на тебя — это и есть ценность.","Ты сам: 100 тыс. ₽ за подписанное помещение, а не за поиск."],
-["Ускорь в 10 раз","Не на 20%, а в 10 раз быстрее. Обычно для этого приходится перестроить весь процесс.","Подбор помещения за 3 дня вместо 2–3 месяцев за счёт парсера и готовой базы."],
-["Сделай невидимое видимым","Покажи клиенту то, что он не может оценить сам: данные, прогноз, риск.","Прогноз выручки точки по трафику до подписания аренды."],
-["Перенеси модель из другой отрасли","Возьми работающую модель из соседнего рынка.","Подписка, как у Netflix, но на подборку помещений для сетей."],
-["Разбей или собери пакет","Раздели дорогую услугу на части или собери разрозненное в одно окно.","«Под ключ»: помещение + договор + ремонт + открытие."],
-["Самообслуживание","Отдай клиенту то, что раньше делал специалист, и сделай это просто.","Сеть сама фильтрует помещения в боте по своим критериям."],
-["Гарантия","Обещай то, чего боятся пообещать другие.","«Если точка не выйдет на план за 6 месяцев — найдём новую бесплатно»."],
-["Целься в забытый сегмент","Найди клиентов, которых рынок игнорирует, потому что они «невыгодные».","Маленькие сети на 3–10 точек: крупным брокерам они неинтересны."]
+["Убери боль целиком","Не уменьшай боль — сделай так, чтобы её не было вообще."],
+["Поменяй, кто платит","Пусть платит другой участник: рекламодатель, продавец, работодатель."],
+["Плата за результат","Деньги только при результате. Риск — на тебе."],
+["Ускорь в 10 раз","Не на 20%, а в 10 раз. Обычно это требует перестроить процесс."],
+["Сделай невидимое видимым","Покажи то, что клиент не может оценить сам: данные, прогноз, статус."],
+["Перенеси модель","Возьми модель из другой отрасли: подписка, маркетплейс, аренда вместо покупки."],
+["Разбей или собери пакет","Раздели дорогое на части или собери разрозненное «под ключ»."],
+["Самообслуживание","Отдай клиенту то, что делал специалист, и сделай это простым."],
+["Гарантия","Пообещай то, что боятся обещать другие."],
+["Забытый сегмент","Обслужи тех, кого рынок считает невыгодными."],
+["Убери посредника","Соедини стороны напрямую и забери часть сэкономленного."],
+["Сделай это социальным","Добавь группу, статус или соревнование: люди тянут людей."]
 ];
+const RUBRIC=[
+["Конкретный клиент","Можно назвать 10 реальных людей или компаний"],
+["Сильная боль или работа","За решение уже платят деньгами или временем"],
+["Измеримый результат","Цифра: часы, рубли, дни, проценты"],
+["Отличие от альтернативы","Конкурента нельзя подставить, чтобы это осталось правдой"],
+["Трудно скопировать","Понятно, почему завтра не повторят"],
+["Ясно за 10 секунд","Поймёт человек не из отрасли"]
+];
+// [компания, регион, что сделали, боль, приёмы(индексы), вывод]
 const CASES=[
-["Тинькофф","Банк без отделений","Работа клиента: управлять деньгами без потери времени. Боль: очереди и поездки в отделение. Приёмы: убрать боль целиком + самообслуживание. Отделения стали ненужными, а сэкономленные деньги ушли в сервис и кешбэк. Конкурент с тысячей отделений не может просто так повторить такую модель."],
-["Airbnb","Жильё у людей","Боль путешественника: отели дорогие и одинаковые. Боль хозяина: квартира простаивает. Приёмы: забытый сегмент (частные хозяева) + перенос модели (маркетплейс). Ценность — доверие через отзывы и гарантию."],
-["Яндекс Go / Uber","Такси по кнопке","Боль: непонятно, когда приедет и сколько стоит. Приёмы: сделать невидимое видимым (машина на карте, цена заранее) + самообслуживание. Без диспетчера."],
-["Авито Доставка","Покупка у незнакомца без риска","Боль: страшно перевести деньги незнакомцу. Приём: гарантия — деньги замораживаются до получения. Убрали главный страх покупки у частника."]
+["Тинькофф","Россия","Банк без отделений: карту привозит курьер, всё в приложении","Очереди и поездки в отделение",[0,7],"Сэкономленное на отделениях ушло в сервис. Банк с тысячей отделений не может так быстро это повторить."],
+["Яндекс Go","Россия","Такси по кнопке: машина на карте, цена заранее","Непонятно, когда приедет и сколько стоит",[4,7],"Убрали диспетчера и неизвестность. Ценность — предсказуемость."],
+["Авито Доставка","Россия","Деньги замораживаются до получения товара","Страшно платить незнакомцу",[8,0],"Сняли главный страх сделки с частником, и выросла вся площадка."],
+["ВкусВилл","Россия","Свежие продукты с коротким сроком; плохое можно вернуть без чека","Страх купить «химию» и несвежее",[8,4],"Короткий срок годности стал доказательством натуральности."],
+["Додо Пицца","Россия","Камера с кухни в прямом эфире, пицца за 60 минут или бесплатно","Недоверие к кухне и долгое ожидание",[4,8],"Прозрачность как маркетинг: «смотрите сами»."],
+["Ozon / Wildberries","Россия","Пункты выдачи у дома, примерка и бесплатный возврат","Нельзя пощупать товар, курьера долго ждать",[0,7],"Сделали онлайн-покупку безрисковой, как в магазине."],
+["Самокат","Россия","Продукты за 15 минут из даркстора","Идти в магазин за двумя вещами",[3],"Скорость стала категорией: «быстрее, чем дойти до магазина»."],
+["Apple iPod + iTunes","Мир","«1000 песен в кармане» + легальный магазин по $0,99 за песню","Пиратство, неудобные плееры",[6,0],"Связали железо и магазин в одну систему. По отдельности это копируется, вместе — нет."],
+["Amazon Prime","Мир","Подписка: бесплатная быстрая доставка без минимальной суммы","Платить за доставку каждый раз",[5,3],"Подписка меняет поведение: раз заплатил — покупаешь всё там."],
+["Netflix","Мир","Без штрафов за просрочку, подписка вместо проката","Штрафы и походы в прокат",[5,0],"Убрали ненавистную боль отрасли, на которой та зарабатывала."],
+["IKEA","Мир","Дешёвая дизайнерская мебель, которую собираешь сам","Хорошая мебель дорогая",[7,6],"Клиент сам везёт и собирает, а цена падает. Самообслуживание как ценность."],
+["Tesla","Мир","Продажа онлайн без дилеров, обновления машины «по воздуху»","Дилеры, машина устаревает после покупки",[10,4],"Машина становится лучше после покупки — такого раньше не было."],
+["Airbnb","Мир","Жильё у частников с отзывами и защитой","Отели дорогие и одинаковые; квартира хозяина простаивает",[9,5],"Доверие между незнакомцами через отзывы и гарантию."],
+["Uber","Мир","Любой водитель может возить; оплата в приложении","Такси не поймать, нужны наличные",[10,7],"Открыли предложение со стороны водителей — частники стали таксистами."],
+["Dollar Shave Club","Мир","Бритвы по подписке за $1 с доставкой","Дорогие лезвия и походы в магазин",[5,10],"Атаковали переплату за бренд прямой продажей."],
+["Duolingo","Мир","Бесплатное обучение-игра, серия дней, уровни","Учить язык скучно, бросаешь",[11,1],"Платят те, кто хочет без рекламы. Удержание через игру."],
+["Alibaba / 1688","Китай","Прямой выход на фабрики для малого бизнеса со всего мира","Найти производителя без связей невозможно",[10,9],"Дали малому бизнесу доступ, который раньше был только у корпораций."],
+["Pinduoduo / Temu","Китай","Групповые покупки: соберёшь друзей — цена ниже","Низкий доход, дорогие товары",[11,10],"Покупатели сами приводят покупателей, реклама почти не нужна."],
+["Xiaomi","Китай","Топовые характеристики почти по себестоимости, заработок на экосистеме","Хорошая техника дорогая",[1,6],"Маржа не на телефоне, а на сервисах и экосистеме."],
+["WeChat Pay / Alipay","Китай","Оплата QR-кодом везде, даже у уличного торговца","Нет карт, нет терминалов",[0,7],"Торговцу нужен только распечатанный QR — дешевле любого терминала."],
+["Meituan","Китай","Одно приложение: еда, такси, отели, услуги","Десятки приложений для бытовых задач",[6],"Суперприложение: всё в одном окне."],
+["Местная пекарня «к поезду»","Малый бизнес","Предзаказ в Telegram, забираешь горячее у станции за 30 секунд","Утром нет времени, очереди",[3,7],"Малый бизнес побеждает не ценой, а точным попаданием в момент."],
+["Барбершоп","Малый бизнес","Мужская стрижка с онлайн-записью, атмосферой клуба и фиксированной ценой","В парикмахерской «для всех» неуютно и долго ждать",[9,11],"Взяли забытый сегмент — мужчин — и сделали стрижку статусом."],
+["Риелтор по коммерции","Малый бизнес","Подбор 5 помещений за 72 часа, оплата только после подписания","Поиск занимает месяцы, платишь за процесс",[3,2],"Твой собственный кейс: скорость плюс оплата за результат."],
+["Химчистка с курьером","Малый бизнес","Забор и доставка вещей по подписке","Тащить вещи и забирать в рабочие часы",[0,5],"Перенесли подписку в «скучную» услугу."]
 ];
-const QUIZ=[
-["Мы помогаем найти помещение для бизнеса.","Подберём 5 помещений под ваш формат за 72 часа. Платите, только если подпишете договор.","Второе: конкретный срок, измеримый результат и снятый риск. Первое можно сказать про любое агентство."],
-["Лучшие пекарни с любовью к хлебу.","Свежий хлеб к 7:00 у каждой станции МЦД — по дороге на работу, без крюка.","Второе описывает работу клиента (позавтракать по пути) и боль (крюк). «С любовью» говорят все."],
-["Сорсинг из Китая под ключ: найдём поставщика, проверим фабрику лично, отправим видео с производства до оплаты.","Качественный сорсинг из Китая по выгодным ценам.","Первое: убирает главный страх — купить кота в мешке — и показывает, как именно."],
-["Приложение для изучения английского.","Генерирует текст про твою работу и твои интересы, ты переводишь, и незнакомые слова сами попадают в карточки.","Второе: личные тексты вместо учебниковых и понятный механизм. Первое ничем не отличается от сотни других."],
-["Аналитика для ритейла на основе больших данных.","Покажем, сколько людей проходит мимо вашего будущего входа, до того как вы подпишете аренду.","Второе делает невидимое видимым и бьёт в момент самого большого риска — подписание аренды. Первое — набор модных слов."],
-["Индивидуальный подход к каждому клиенту.","Один менеджер ведёт вас от первого звонка до открытия точки и отвечает в Telegram в течение 15 минут.","«Индивидуальный подход» обещают все, и это нельзя проверить. Второе проверяется."]
+// [вариант A, вариант B, правильный (0/1), объяснение]
+const PAIRS=[
+["Мы помогаем найти помещение для бизнеса.","Подберём 5 помещений под ваш формат за 72 часа. Платите, только если подпишете договор.",1,"Срок, измеримый результат, снятый риск. Первое скажет любое агентство."],
+["Лучшие пекарни с любовью к хлебу.","Горячий хлеб к 7:00 у каждой станции МЦД — по дороге на работу, без крюка.",1,"Работа клиента и боль (крюк). «С любовью» говорят все."],
+["Сорсинг из Китая: найдём поставщика, лично проверим фабрику, пришлём видео с производства до оплаты.","Качественный сорсинг из Китая по выгодным ценам.",0,"Первое убирает главный страх — купить кота в мешке."],
+["Аналитика для ритейла на основе больших данных.","Покажем, сколько людей проходит мимо вашего будущего входа, до подписания аренды.",1,"Невидимое становится видимым в момент наибольшего риска."],
+["Индивидуальный подход к каждому клиенту.","Один менеджер от звонка до открытия, ответ в Telegram за 15 минут.",1,"Второе можно проверить, первое обещают все."],
+["Фитнес-клуб премиум-класса с современным оборудованием.","Если за 3 месяца не похудеешь на 5 кг — вернём деньги за абонемент.",1,"Гарантия результата бьёт в настоящую работу: похудеть, а не «ходить в зал»."],
+["Бухгалтерия для ИП: сдаём отчёты сами, штрафы из-за нас оплачиваем мы.","Профессиональные бухгалтерские услуги с опытом более 10 лет.",0,"Боль — страх штрафов. Опыт — не ценность, а аргумент."],
+["Курсы английского от носителей языка.","Через 8 недель проведёшь 15-минутный созвон с иностранцем без подготовки — или учишься бесплатно.",1,"Измеримый результат и гарантия против расплывчатой характеристики."],
+["Доставка воды 19 л: напомним, когда вода заканчивается, и привезём сами.","Чистая вода высшего качества.",0,"Убирает работу «помнить и заказывать». Качество — гигиенический минимум."],
+["Удобное мобильное приложение банка.","Переводы в Китай за 1 минуту по курсу биржи, без похода в отделение.",1,"Конкретный сегмент и острая боль."],
+["Свадебное агентство полного цикла.","Свадьба на 50 гостей за фиксированные 600 тыс. ₽ — смета не вырастет ни на рубль.",1,"Боль — смета, которая растёт. Фиксированная цена её убирает."],
+["Уютная кофейня в центре города.","Кофе навынос за 40 секунд: заказ в боте, на стойке уже ждёт.",1,"«Уютная» — у всех. Скорость под конкретную работу — твоя."]
 ];
-const LABCASES=[
-["Своя: поиск помещений для сетей","Твоя текущая работа как продукт. Кто платит, за что и что для сети сейчас больнее всего?"],
-["Лиды для брокеров в США (идея А)","Американский брокер по коммерческой недвижимости. Чем он находит объекты сейчас и что его бесит?"],
-["Сорсинг из Вэньчжоу (идея Б)","Продавец на Amazon или небольшой магазин в США. Чего он боится при закупке в Китае?"],
-["Приложение для английского","Человек, который учит английский для поступления. Почему он бросает обычные приложения?"],
-["Свободный кейс","Любая идея, которую хочешь проверить."]
+// [формулировка, правильный дефект (индекс RUBRIC), объяснение]
+const DIAG=[
+["Инновационные решения для вашего бизнеса.",0,"Кто клиент? Неизвестно. Сначала сегмент."],
+["Для кофеен: мы делаем ваш бизнес лучше.",2,"Клиент есть, но «лучше» не измерить. Сколько? Чего?"],
+["Для сетей пекарен: подбираем помещения быстро и качественно.",3,"Так скажет любой брокер. Нет отличия."],
+["Для малого бизнеса: красивый дизайн визитки за 500 ₽.",1,"Визитка — слабая боль. За её решение почти не платят."],
+["Для стартапов: синергетическая омниканальная платформа для оптимизации кросс-функциональных процессов.",5,"Непонятно за 10 секунд. Жаргон прячет пустоту."],
+["Для интернет-магазинов: скидка 10% на рекламу при оплате за год.",4,"Скидку конкурент повторит завтра. Это не преимущество."],
+["Для студентов: приложение, которое помогает учиться.",2,"Помогает как? Насколько? Нет результата."],
+["Для владельцев квартир: сдадим квартиру быстрее конкурентов.",3,"«Быстрее конкурентов» — пустое сравнение. Насколько и почему?"],
+["Для всех, кто любит путешествовать: лучшие туры.",0,"«Все» — не сегмент. Кто конкретно?"],
+["Для ресторанов: бесплатный Wi-Fi для гостей.",4,"Это есть у всех и копируется за день."]
 ];
-const CHECKS=[
-"Клиент конкретный: можно назвать 10 реальных людей или компаний",
-"Работа клиента описана его словами, а не твоими",
-"Главная боль сильная: за её решение уже платят деньгами или временем",
-"Предложение бьёт в главную боль, а не во второстепенную",
-"Результат измерим: часы, рубли, дни, проценты",
-"Конкурента нельзя подставить в формулу так, чтобы она осталась правдой",
-"Использован хотя бы один приём, который ломает модель рынка",
-"Понятно, почему другие не повторят это завтра",
-"Можно проверить за неделю без создания продукта",
-"Объясняется за 10 секунд человеку не из отрасли"
+const SEG=["владельцы кофеен","дальнобойщики","пенсионеры в регионах","студенты-иностранцы в Китае","стоматологические клиники","родители школьников","фрилансеры-дизайнеры","фермеры","автосервисы","строительные бригады","мини-отели","блогеры","юристы-одиночки","фитнес-тренеры","интернет-магазины одежды","салоны красоты","учителя","небольшие склады","IT-стартапы","рестораны","аптеки","туристы в Китае","арендаторы квартир","владельцы собак","молодые мамы","продавцы на Amazon","сети пекарен","застройщики","автошколы","репетиторы","водители такси","кондитеры на дому","экспортёры из Китая","кружки для детей","ветеринарные клиники"];
+const PROD=["химчистка","страхование","школа английского","доставка воды","парикмахерская","ипотека","автомойка","фитнес-клуб","кинотеатр","свадебное агентство","прачечная","аренда офиса","курсы вождения","ремонт квартир","доставка цветов","бухгалтерия","агентство недвижимости","такси","ремонт телефонов","гостиница"];
+const LV=[
+{n:"Новичок",t:300,need:0,trick:false,desc:"5 минут, приём выбираешь сам"},
+{n:"Практик",t:240,need:5.5,trick:false,desc:"4 минуты"},
+{n:"Мастер",t:180,need:6.5,trick:true,desc:"3 минуты, приём задан"},
+{n:"Эксперт",t:120,need:7.5,trick:true,desc:"2 минуты, приём задан, любые отрасли"},
+{n:"Профи",t:90,need:8.5,trick:true,desc:"90 секунд — «по щелчку»"}
 ];
+const TEST=[
+{q:"Что в канве ценностного предложения относится к профилю клиента?",o:["Продукты, обезболивающие, создатели выгод","Работы, боли, выгоды","Сегменты, каналы, доходы"],a:1},
+{q:"Что такое «работа клиента» (job)?",o:["Его профессия","То, что он пытается сделать или решить","Что ему продаёт компания"],a:1},
+{q:"Какое из этого — боль?",o:["Хочу выглядеть успешным","Страх переплатить за ремонт","Сделать отчёт"],a:1},
+...PAIRS.slice(0,4).map(p=>({q:"Какое предложение сильнее?",o:[p[0],p[1]],a:p[2]})),
+...DIAG.slice(0,3).map(d=>({q:"Главный дефект: «"+d[0]+"»",o:RUBRIC.map(r=>r[0]),a:d[1]}))
+];
+
+/* ===== STATE ===== */
+const K='vp2';
+let S=(()=>{try{return JSON.parse(localStorage.getItem(K))||null}catch(e){return null}})()||{lvl:null,days:{},sprints:[],best:null,test:null};
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 const $=s=>document.querySelector(s);
-const st=(()=>{try{return JSON.parse(localStorage.getItem('vp')||'{}')}catch(e){return {}}})();
-function save(){try{localStorage.setItem('vp',JSON.stringify(st))}catch(e){}}
-function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',1800)}
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(()=>e.style.display='none',2000)}
+function streak(){let n=0,d=new Date();if(!S.days[today()])d.setDate(d.getDate()-1);
+for(;;){const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');if(S.days[k]&&S.days[k].done){n++;d.setDate(d.getDate()-1)}else break}return n}
+function avgRecent(){const r=S.sprints.slice(-9);return r.length?r.reduce((a,s)=>a+s.score,0)/r.length:null}
+function checkLevel(){if(S.lvl===null)return;const a=avgRecent();if(a===null||S.sprints.length<6)return;
+if(S.lvl<4&&a>=LV[S.lvl+1].need){S.lvl++;save();toast('Новый уровень: '+LV[S.lvl].n+'!')}}
 
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
-document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));
-document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===b.dataset.s));
-window.scrollTo(0,0)});
+/* ===== NAV ===== */
+function go(id){document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.s===id));
+document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0);
+if(id==='home')renderHome();if(id==='prog')renderProg();if(id==='work'&&!W)renderWorkStart()}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.s));
 
-$('#trickList').innerHTML=TRICKS.map((t,i)=>`<div class="card"><span class="tag">Приём ${i+1}</span><h3>${t[0]}</h3><p>${t[1]}</p><p class="mut">Пример: ${t[2]}</p></div>`).join('');
-$('#caseList').innerHTML=CASES.map(c=>`<div class="card"><span class="tag">${c[1]}</span><h3>${c[0]}</h3><p>${c[2]}</p></div>`).join('');
+/* ===== HOME ===== */
+function renderHome(){
+$('#sStreak').textContent=streak();$('#sLvl').textContent=S.lvl===null?'—':(S.lvl+1);
+const a=avgRecent();$('#sAvg').textContent=a===null?'—':a.toFixed(1);$('#sBest').textContent=S.best||'—';
+const c=$('#homeCard');
+if(S.lvl===null){c.innerHTML=`<h2>Начни с входного теста</h2><p class="mut">10 вопросов, около 4 минут. Тест определит твой стартовый уровень.</p><button class="btn w" id="tGo">Пройти тест</button>`;$('#tGo').onclick=startTest;return}
+const L=LV[S.lvl],d=S.days[today()],dayN=Object.keys(S.days).filter(k=>S.days[k].done).length;
+const nxt=S.lvl<4?LV[S.lvl+1]:null;
+c.innerHTML=`<span class="tag">Уровень ${S.lvl+1}: ${L.n}</span><span class="tag g">День ${Math.min(dayN+(d&&d.done?0:1),30)} из 30</span>
+<h2>${d&&d.done?'Тренировка сегодня сделана ✅':'Тренировка дня ~25 минут'}</h2>
+<p class="mut">Разминка: 4 пары «сильное/слабое» → Диагноз: 3 предложения → 3 спринта (${L.desc}) → итог и разбор с Claude.</p>
+${nxt?`<p class="mut">До уровня «${nxt.n}»: средний балл последних спринтов ≥ ${nxt.need}</p><div class="bar"><i style="width:${Math.min(100,((a||0)/nxt.need)*100)}%"></i></div>`:'<p class="mut">Максимальный уровень. Держи форму.</p>'}
+<button class="btn w" id="wGo">${d&&d.done?'Ещё одна тренировка':'Начать тренировку'}</button>`;
+$('#wGo').onclick=()=>{W=null;go('work');startWork()}}
 
-let qs=0,done=0;$('#qt').textContent=QUIZ.length;
-const RIGHT=[1,1,0,1,1,1];
-$('#quizList').innerHTML=QUIZ.map((q,i)=>`<div class="card"><span class="tag">Пара ${i+1}</span>
-<button class="opt" data-w="${RIGHT[i]===0?1:0}">${q[0]}</button>
-<button class="opt" data-w="${RIGHT[i]===1?1:0}">${q[1]}</button>
-<div class="expl">${q[2]}</div></div>`).join('');
-document.querySelectorAll('#quizList .card').forEach(c=>{
-c.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{
-if(c.dataset.d)return;c.dataset.d=1;done++;
-c.querySelectorAll('.opt').forEach(x=>x.classList.add(x.dataset.w==='1'?'good':'badc'));
-if(o.dataset.w==='1')qs++;$('#qs').textContent=qs;c.querySelector('.expl').style.display='block';
-})});
+/* ===== TEST ===== */
+let T;
+function startTest(){T={i:0,ok:0};go('work');W={mode:'test'};renderTest()}
+function renderTest(){const q=TEST[T.i];
+$('#wk').innerHTML=`<div class="card"><span class="tag">Тест ${T.i+1}/${TEST.length}</span><div class="steps">${TEST.map((_,i)=>`<i class="${i<=T.i?'on':''}"></i>`).join('')}</div>
+<h3>${q.q}</h3>${q.o.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('')}<div id="tx"></div></div>`;
+document.querySelectorAll('#wk .opt').forEach(b=>b.onclick=()=>{if(T.ans)return;T.ans=1;const ok=+b.dataset.i===q.a;if(ok)T.ok++;
+document.querySelectorAll('#wk .opt').forEach(x=>{if(+x.dataset.i===q.a)x.classList.add('good');else if(x===b)x.classList.add('badc')});
+$('#tx').innerHTML=`<button class="btn w" id="tn">${T.i<TEST.length-1?'Дальше':'Результат'}</button>`;
+$('#tn').onclick=()=>{T.ans=0;T.i++;if(T.i<TEST.length)renderTest();else endTest()}})}
+function endTest(){const p=T.ok;S.lvl=p>=9?2:p>=7?1:0;S.test=p;save();W=null;
+$('#wk').innerHTML=`<div class="card"><h2>${p} из ${TEST.length}</h2><p>Стартовый уровень: <b>${S.lvl+1} — ${LV[S.lvl].n}</b>.</p>
+<p class="mut">${p>=9?'Теорию знаешь. Дальше — скорость и качество в спринтах.':p>=7?'База есть. Отработаем, как отличать сильное от слабого, и скорость.':'Начнём с основ: загляни во вкладку «Теория» (5 минут), потом в тренировку.'}</p>
+<p class="mut">Уровень дальше растёт по среднему баллу спринтов. Тест не повторяется.</p>
+<button class="btn w" id="tw">Начать первую тренировку</button></div>`;
+$('#tw').onclick=()=>{startWork()}}
 
-$('#caseSel').innerHTML=LABCASES.map((c,i)=>`<option value="${i}">${c[0]}</option>`).join('');
-$('#f_trick').innerHTML='<option value="">— выбери —</option>'+TRICKS.map(t=>`<option>${t[0]}</option>`).join('');
-const F=['who','job','pain','gain','alt','trick','vp','test'];
-function key(){return 'c'+$('#caseSel').value}
-function load(){const d=st[key()]||{};F.forEach(f=>$('#f_'+f).value=d[f]||'');
-$('#caseHint').textContent=LABCASES[$('#caseSel').value][1];
-document.querySelectorAll('#checks input').forEach((c,i)=>c.checked=!!(d.ch||[])[i]);score()}
-$('#checks').innerHTML=CHECKS.map((c,i)=>`<label class="chk" style="font-weight:400;margin:0"><input type="checkbox" data-i="${i}"><span>${c}</span></label>`).join('');
-function collect(){const d=st[key()]=st[key()]||{};F.forEach(f=>d[f]=$('#f_'+f).value);
-d.ch=[...document.querySelectorAll('#checks input')].map(c=>c.checked);save();score()}
-function score(){const n=[...document.querySelectorAll('#checks input')].filter(c=>c.checked).length;
-$('#sc').textContent=n;$('#scTxt').textContent=n>=9?'сильно, неси на проверку клиентам':n>=6?'есть основа, дожимай слабые пункты':'пока описание услуги, а не предложение'}
-F.forEach(f=>$('#f_'+f).addEventListener('input',collect));$('#f_trick').addEventListener('change',collect);
-document.querySelectorAll('#checks input').forEach(c=>c.addEventListener('change',collect));
-$('#caseSel').onchange=load;load();
-function text(){const d=st[key()]||{};const n=(d.ch||[]).filter(Boolean).length;
-return `Оцени моё ценностное предложение как наставник и бизнес-советник. Будь жёстким и конкретным: что слабо, как усилить, какой приём ещё применить.
+/* ===== WORKOUT ===== */
+let W=null,TM=null;
+function renderWorkStart(){$('#wk').innerHTML=`<div class="card"><h2>Тренировка дня</h2><p class="mut">~25 минут: разминка, диагноз, 3 спринта.</p><button class="btn w" id="ws">Поехали</button></div>`;
+$('#ws').onclick=()=>{if(S.lvl===null)startTest();else startWork()}}
+function startWork(){if(S.lvl===null)return startTest();
+W={mode:'work',stage:0,pairs:shuf(PAIRS).slice(0,4),diag:shuf(DIAG).slice(0,3),i:0,pOk:0,dOk:0,sprints:[]};go('work');renderStage()}
+function stageBar(){const st=['Разминка','Диагноз','Спринт 1','Спринт 2','Спринт 3','Итог'];const cur=W.stage<2?W.stage:W.stage===2?2+W.sprints.length:5;
+return `<div class="steps">${st.map((_,i)=>`<i class="${i<=cur?'on':''}"></i>`).join('')}</div><div class="mut">${st[Math.min(cur,5)]}</div>`}
+function renderStage(){
+if(W.stage===0){const p=W.pairs[W.i];
+$('#wk').innerHTML=`<div class="card">${stageBar()}<h3>Какое сильнее? (${W.i+1}/4)</h3><button class="opt" data-i="0">${p[0]}</button><button class="opt" data-i="1">${p[1]}</button><div id="ex"></div></div>`;
+document.querySelectorAll('#wk .opt').forEach(b=>b.onclick=()=>{if(W.lock)return;W.lock=1;const ok=+b.dataset.i===p[2];if(ok)W.pOk++;
+document.querySelectorAll('#wk .opt').forEach(x=>x.classList.add(+x.dataset.i===p[2]?'good':'badc'));
+$('#ex').innerHTML=`<p class="expl">${ok?'✅':'❌'} ${p[3]}</p><button class="btn w" id="nx">Дальше</button>`;
+$('#nx').onclick=()=>{W.lock=0;W.i++;if(W.i>=4){W.stage=1;W.i=0}renderStage()}})}
+else if(W.stage===1){const d=W.diag[W.i];
+$('#wk').innerHTML=`<div class="card">${stageBar()}<h3>Найди главный дефект (${W.i+1}/3)</h3><div class="formula">${d[0]}</div>${RUBRIC.map((r,i)=>`<button class="opt" data-i="${i}">${r[0]}</button>`).join('')}<div id="ex"></div></div>`;
+document.querySelectorAll('#wk .opt').forEach(b=>b.onclick=()=>{if(W.lock)return;W.lock=1;const ok=+b.dataset.i===d[1];if(ok)W.dOk++;
+document.querySelectorAll('#wk .opt').forEach(x=>{if(+x.dataset.i===d[1])x.classList.add('good');else if(x===b)x.classList.add('badc')});
+$('#ex').innerHTML=`<p class="expl">${ok?'✅':'❌'} ${d[2]}</p><button class="btn w" id="nx">Дальше</button>`;
+$('#nx').onclick=()=>{W.lock=0;W.i++;if(W.i>=3){W.stage=2}renderStage()}})}
+else if(W.stage===2){if(W.sprints.length>=3){W.stage=3;return renderStage()}sprint($('#wk'),r=>{W.sprints.push(r);renderStage()},stageBar())}
+else finishWork()}
 
-Кейс: ${LABCASES[$('#caseSel').value][0]}
-Клиент: ${d.who||'-'}
-Работа: ${d.job||'-'}
-Боли: ${d.pain||'-'}
-Выгоды: ${d.gain||'-'}
-Альтернатива: ${d.alt||'-'}
-Приём: ${d.trick||'-'}
-Предложение: ${d.vp||'-'}
-Проверка за неделю: ${d.test||'-'}
-Самооценка: ${n}/10`}
-$('#copy').onclick=async()=>{const t=text();$('#out').textContent=t;
-try{await navigator.clipboard.writeText(t);toast('Скопировано — вставь в чат')}catch(e){toast('Выдели текст ниже и скопируй вручную')}};
-$('#clear').onclick=()=>{delete st[key()];save();load();$('#out').textContent=''};
+function makeTask(){const L=LV[S.lvl||0];const t=Math.random()<0.55?{kind:'seg',txt:'Придумай ценностное предложение для: <b>'+rnd(SEG)+'</b>'}:{kind:'prod',txt:'Переизобрети услугу: <b>'+rnd(PROD)+'</b>. Сделай так, чтобы старая версия стала не нужна.'};
+if(L.trick){t.trick=rnd(TRICKS);t.txt+='<br><span class="mut">Обязательный приём: '+t.trick[0]+' — '+t.trick[1]+'</span>'}t.sec=L.t;return t}
+
+function sprint(box,done,head){const t=makeTask();let left=t.sec,start=Date.now(),sc=RUBRIC.map(()=>-1);
+box.innerHTML=`<div class="card">${head||''}<div class="task">${t.txt}</div>
+<div class="timer" id="tm">${fmt(left)}</div>
+<div class="formula" style="font-size:13px">Для [кого], которые хотят [работа], но страдают от [боль], наш [продукт] [измеримый результат]. В отличие от [альтернатива], мы [то, что сложно повторить].</div>
+<textarea id="ans" placeholder="Твоё предложение…" style="margin-top:10px"></textarea>
+<button class="btn w" id="sd">Готово</button><div id="sr"></div></div>`;
+clearInterval(TM);TM=setInterval(()=>{left--;const e=$('#tm');if(!e){clearInterval(TM);return}e.textContent=fmt(Math.max(left,0));e.classList.toggle('low',left<=20);if(left<=0){clearInterval(TM);toast('Время! Допиши мысль и жми «Готово»')}},1000);
+$('#sd').onclick=()=>{clearInterval(TM);const used=Math.round((Date.now()-start)/1000);$('#sd').remove();$('#ans').readOnly=true;
+$('#sr').innerHTML=`<h3 style="margin-top:14px">Оцени себя честно: 0 — нет, 1 — частично, 2 — да</h3>${RUBRIC.map((r,i)=>`<div class="rub"><div><b>${r[0]}</b><div class="mut">${r[1]}</div></div><div class="seg" data-i="${i}">${[0,1,2].map(v=>`<button data-v="${v}">${v}</button>`).join('')}</div></div>`).join('')}
+<button class="btn w" id="sok" disabled style="opacity:.5">Сохранить</button>`;
+document.querySelectorAll('#sr .seg').forEach(g=>g.querySelectorAll('button').forEach(b=>b.onclick=()=>{sc[+g.dataset.i]=+b.dataset.v;g.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+if(sc.every(v=>v>=0)){const o=$('#sok');o.disabled=false;o.style.opacity=1}}));
+$('#sok').onclick=()=>{const raw=sc.reduce((a,b)=>a+b,0);const score=Math.round(raw/12*100)/10;
+const rec={d:today(),task:t.txt.replace(/<[^>]+>/g,''),ans:$('#ans').value.trim(),score,used,lvl:S.lvl,parts:sc};
+S.sprints.push(rec);if(score>=7&&(!S.best||used<S.best))S.best=used;save();checkLevel();done(rec)}}}
+function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+
+function finishWork(){const sp=W.sprints,avg=sp.reduce((a,s)=>a+s.score,0)/sp.length;
+const day=S.days[today()]||{};day.done=true;day.avg=Math.max(day.avg||0,+avg.toFixed(1));day.pairs=W.pOk;day.diag=W.dOk;S.days[today()]=day;save();
+const weak=RUBRIC.map((r,i)=>[r[0],sp.reduce((a,s)=>a+s.parts[i],0)]).sort((a,b)=>a[1]-b[1])[0][0];
+const txt=`Разбери мою тренировку по ценностным предложениям как жёсткий наставник. Для каждого спринта: оценка 0–10, главный дефект, как переписать сильнее (дай свою версию).
+
+Уровень: ${LV[S.lvl].n}. Разминка ${W.pOk}/4, диагноз ${W.dOk}/3.
+`+sp.map((s,i)=>`\nСпринт ${i+1}: ${s.task}\nОтвет: ${s.ans||'(пусто)'}\nМоя самооценка: ${s.score}/10, время ${s.used} с`).join('\n');
+$('#wk').innerHTML=`<div class="card">${stageBar()}<h2>Тренировка сделана 🔥</h2>
+<div class="stats"><div class="stat"><b>${W.pOk}/4</b><span>разминка</span></div><div class="stat"><b>${W.dOk}/3</b><span>диагноз</span></div><div class="stat"><b>${avg.toFixed(1)}</b><span>ср. балл</span></div><div class="stat"><b>${streak()}</b><span>серия</span></div></div>
+<p>Слабее всего: <b>${weak}</b>. Завтра держи этот пункт в голове с первой секунды.</p>
+<p class="mut">Самооценка помогает, но реальный рост даёт внешний разбор. Скопируй и вставь мне в чат.</p>
+<button class="btn w" id="cp">Скопировать на разбор Claude</button><pre id="pt">${txt.replace(/</g,'&lt;')}</pre>
+<button class="btn alt w" id="hm">На главную</button></div>`;
+$('#cp').onclick=async()=>{try{await navigator.clipboard.writeText(txt);toast('Скопировано — вставь в чат с Claude')}catch(e){toast('Выдели текст ниже вручную')}};
+$('#hm').onclick=()=>{W=null;go('home')};W.stage=9}
+
+/* ===== FREE ===== */
+$('#freeGo').onclick=()=>{if(S.lvl===null){toast('Сначала входной тест');return startTest()}
+sprint($('#freeBox'),r=>{$('#freeBox').innerHTML=`<div class="card"><h3>Балл: ${r.score}/10 за ${r.used} с</h3><p class="mut">${r.score>=8?'Сильно. Попробуй быстрее.':r.score>=6?'Есть основа. Добей самый слабый пункт.':'Вернись к формуле: кто, боль, цифра, отличие.'}</p></div>`})};
+
+/* ===== CASES ===== */
+let cfSel='Все';
+function renderCases(){const regs=['Все','Россия','Мир','Китай','Малый бизнес'];
+$('#cf').innerHTML=regs.map(r=>`<button class="${r===cfSel?'on':''}">${r}</button>`).join('');
+$('#cf').querySelectorAll('button').forEach(b=>b.onclick=()=>{cfSel=b.textContent;renderCases()});
+$('#caseList').innerHTML=CASES.filter(c=>cfSel==='Все'||c[1]===cfSel).map((c,i)=>`<div class="card"><span class="tag">${c[1]}</span><h3>${c[0]}</h3><p>${c[2]}</p><p class="mut">Боль: ${c[3]}</p>
+<details><summary class="mut">Угадай приём — потом открой</summary><p><b>Приёмы:</b> ${c[4].map(t=>TRICKS[t][0]).join(' + ')}</p><p>${c[5]}</p></details></div>`).join('')}
+renderCases();
+
+/* ===== THEORY ===== */
+$('#th').innerHTML=`<div class="card"><h2>Алгоритм за 60 секунд</h2><ol>
+<li><b>Кто?</b> Один конкретный сегмент, а не «все».</li>
+<li><b>Что он пытается сделать?</b> Его работа, его словами.</li>
+<li><b>Что больнее всего?</b> То, за что уже платят временем или деньгами.</li>
+<li><b>Чем он пользуется сейчас?</b> Альтернатива — это твой реальный конкурент.</li>
+<li><b>Приём.</b> Прогони через 3–4 приёма ниже и выбери самый смелый.</li>
+<li><b>Цифра.</b> Добавь измеримый результат.</li>
+<li><b>Тест подстановки.</b> Подставь конкурента. Если осталось правдой — переделай.</li></ol></div>
+<div class="card"><h3>Формула</h3><div class="formula">Для <b>[кого]</b>, которые хотят <b>[работа]</b>, но страдают от <b>[боль]</b>, наш <b>[продукт]</b> даёт <b>[измеримый результат]</b>. В отличие от <b>[альтернатива]</b>, мы <b>[то, что сложно повторить]</b>.</div></div>
+<div class="card"><h3>Канва Остервальдера</h3><p class="mut">Профиль клиента: работы, боли, выгоды. Карта ценности: продукты, обезболивающие, создатели выгод. Предложение работает, когда карта попадает в профиль. Канва проверяет идею, а приёмы её рождают.</p></div>
+<div class="card"><h3>Шкала оценки (0–2 по каждому пункту)</h3>${RUBRIC.map(r=>`<p><b>${r[0]}</b><br><span class="mut">${r[1]}</span></p>`).join('')}
+<p class="mut">Сумма из 12 переводится в 10. 8+ — сильное, 6–7 — рабочее, ниже 6 — описание услуги, а не предложение. По этой же шкале оценивай чужие предложения: рекламу, сайты, питчи.</p></div>
+<div class="card"><h3>12 приёмов</h3>${TRICKS.map((t,i)=>`<p><b>${i+1}. ${t[0]}</b><br><span class="mut">${t[1]}</span></p>`).join('')}</div>
+<div class="card"><h3>Ежедневная привычка вне тренажёра</h3><p class="mut">Увидел вывеску, рекламу или сайт — за 30 секунд оцени по шкале и придумай, как бы ты усилил. Это и есть «по щелчку».</p></div>`;
+
+/* ===== PROGRESS ===== */
+function renderProg(){const ks=Object.keys(S.days).sort().slice(-30);
+if(!ks.length){$('#chart').innerHTML='<p class="mut">Пока пусто — сделай первую тренировку.</p>'}else{
+const w=320,h=140,p=20,xs=i=>p+(ks.length<2?0:i*(w-2*p)/(ks.length-1)),ys=v=>h-p-(v/10)*(h-2*p);
+const pts=ks.map((k,i)=>xs(i)+','+ys(S.days[k].avg||0)).join(' ');
+$('#chart').innerHTML=`<svg viewBox="0 0 ${w} ${h}" width="100%"><line x1="${p}" x2="${w-p}" y1="${ys(8)}" y2="${ys(8)}" stroke="currentColor" opacity=".2" stroke-dasharray="4"/><text x="${w-p}" y="${ys(8)-4}" font-size="10" text-anchor="end" fill="currentColor" opacity=".5">8 — сильно</text>
+<polyline points="${pts}" fill="none" stroke="var(--acc)" stroke-width="2.5"/>${ks.map((k,i)=>`<circle cx="${xs(i)}" cy="${ys(S.days[k].avg||0)}" r="3.5" fill="var(--acc)"/>`).join('')}</svg>`}
+$('#lvls').innerHTML=LV.map((l,i)=>`<p style="${i===S.lvl?'font-weight:700':''}">${i===S.lvl?'▶ ':''}${i+1}. ${l.n} — ${l.desc}${i?`, нужен ср. балл ≥ ${l.need}`:''}</p>`).join('');
+$('#hist').innerHTML=S.sprints.slice(-10).reverse().map(s=>`<p>${s.d} · <b>${s.score}</b> · ${s.used} с<br>${(s.ans||'').slice(0,140)}</p>`).join('')||'—'}
+$('#reset').onclick=()=>{if(S._r){S={lvl:null,days:{},sprints:[],best:null,test:null};save();toast('Сброшено');renderProg()}else{S._r=1;toast('Нажми ещё раз, чтобы сбросить')}};
+
+renderHome();
 </script>
 </body>
 </html>
